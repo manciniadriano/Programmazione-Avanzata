@@ -15,5 +15,9 @@ export class Model implements LP{
         this.name = modelBuilder.getName();
         this.objective = modelBuilder.getObjective();
         this.subjectTo = modelBuilder.getSubjectTo();
+        this.bounds = modelBuilder.getBounds();
+        this.binaries = modelBuilder.getBinaries();
+        this.generals = modelBuilder.getGenerals();
+        this.options = modelBuilder.getOptions();
     }
 }
