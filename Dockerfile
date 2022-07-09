@@ -1,6 +1,13 @@
 FROM node:lts-stretch-slim
+#RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
 
-WORKDIR /usr/src/app
+WORKDIR /home/node/app
+
+#COPY package*.json ./
+
+#USER node
 COPY . .
 RUN npm install
-CMD ["node", "index.js"]
+RUN npm install -g typescript
+RUN tsc
+CMD [ "node", "index.js" ]

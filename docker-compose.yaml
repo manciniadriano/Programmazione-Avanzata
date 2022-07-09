@@ -10,16 +10,13 @@ services:
           - 5432:5432
         volumes: 
           # copy the sql script to create tables
-          - ./scripts/full.sql:/docker-entrypoint-initdb.d/full.sql          
-    web-node:
+          - ./scripts/full.sql:/docker-entrypoint-initdb.d/full.sql         
+    nodeapp:
         build: .
+        restart: always
         ports:
           - 8080:8080
-        environment:
-          - PGUSER=postgres
-          - PGDATABASE=pa
-          - PGHOST=dbpg
-          - PGPASSWORD=postgres
-          - PGPORT=5432
+        env_file:
+          - .env
         depends_on:
           - dbpg

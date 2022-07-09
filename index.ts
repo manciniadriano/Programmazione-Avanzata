@@ -1,12 +1,14 @@
-const express = require("express");
-var app = express();
-const bodyParser = require("body-parser");
-const { LP, Options } = require('glpk.js');
-const e = require("express");
-const { send } = require("server/reply");
+import { SingletonDB } from "./model/Database";
+import * as express from 'express';
 
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+//import * as bodyParser from "bod"
+//const express = require("express");
+var app = express();
+//const bodyParser = require("body-parser");
+//const { LP, Options } = require('glpk.js');
+
+//app.use(bodyParser.json());
+//app.use(bodyParser.urlencoded({ extended: false }));
 
 const PORT = 8080;
 const HOST = '0.0.0.0';
@@ -252,6 +254,7 @@ app.use('/newModel', (req, res, next) => {
 
 
 //Controllo per Bounds? opzionale.
+
 app.use('/newModel', (req, res, next) => {
     let object = req.body.bounds;
     if (object) {
@@ -308,7 +311,7 @@ app.use('/newModel', (req,res,next) => {
     let object = req.body.binaries;
     if (object) {
         if (object.length) {
-            flag = true;
+            let flag = true;
             for (const item of object) {
                 if (typeof item === 'string') {
                     if(searchVar(item, body)){
@@ -356,6 +359,7 @@ const valore = (variabile, object) => {
         return 0.05;
     }
 }
+
 
 app.use('/newModel', (req,res, next) => {
     let object = req.body;
