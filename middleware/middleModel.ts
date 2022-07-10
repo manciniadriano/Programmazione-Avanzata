@@ -1,9 +1,9 @@
 import * as middleF from "./validators/modelValidator";
+import * as jwt from "jsonwebtoken";
 
 export async function newModelValidation(req: any, res: any, next: any) {
   try {
     let response = await middleF.validationModel(req.body);
-    console.log(response);
     if (response) {
       console.log("Richiesta ben formata");
       next();
@@ -15,3 +15,4 @@ export async function newModelValidation(req: any, res: any, next: any) {
     res.sendStatus(403);
   }
 }
+

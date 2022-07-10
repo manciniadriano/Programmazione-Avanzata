@@ -52,16 +52,11 @@ const searchVar = (item, body) => {
  *  Return: Boolean indicating success or not
  */
 export const isJsonString = (obj: any) => {
-  console.log(obj)
-  try {
-    let a = JSON.stringify(obj);
-    console.log(a)
-    JSON.parse(a);
-  } catch (e) {
-    console.log('Not valid')
-    return false;
+  if(obj) {
+    return true
+  } else {
+    return false
   }
-  return true;
 };
 
 /*

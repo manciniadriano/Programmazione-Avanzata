@@ -34,7 +34,7 @@ export class SingletonDB {
         return SingletonDB.instance;
     }
 
-    public someBusinessLogic() {
-        
+    public getConnection() {
+        return this.singleConnection;        
     }
 }

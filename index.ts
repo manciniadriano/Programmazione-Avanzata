@@ -1,19 +1,16 @@
 import { SingletonDB } from "./model/Database";
 import * as express from 'express';
 import * as mNM from './middleware/middleModel';
+import { createSemanticDiagnosticsBuilderProgram } from "typescript";
+import { send } from "process";
 
-
-//import * as bodyParser from "bod"
-//const express = require("express");
 var app = express();
-//const bodyParser = require("body-parser");
-//const { LP, Options } = require('glpk.js');
-//app.use(express.json())
-//app.use(bodyParser.json());
-//app.use(bodyParser.urlencoded({ extended: false }));
+
 
 const PORT = 8080;
 const HOST = '0.0.0.0';
+
+
 
 /*
 function checkVars(objectField, res) {
@@ -325,35 +322,6 @@ app.use('/newModel', (req,res,next) => {
         next();
     }
 })
-
-const costContraint = (object) => {
-    let c = object.subjectTo.length;
-    if (object.bounds) {
-        let co = object.bounds.length;
-        return  c*0.01 + co*0.01
-    } else { 
-    return c*0.01
-    } 
-}
-
-const checkBinOrInt = (object) => {
-    let costo = 0;
-    for(const item of object.objective.vars) {
-        costo += valore(item.name, object)
-    }
-    return costo;
-}
-
-const valore = (variabile, object) => {
-    if (object.binaries && object.binaries.includes(variabile)){
-        return 0.1;
-    } else if (object.generals && object.generals.includes(variabile)) {
-        return 0.1;
-    } else {
-        return 0.05;
-    }
-}
-
 
 app.use('/newModel', (req,res, next) => {
     let object = req.body;
