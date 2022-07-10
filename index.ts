@@ -1,27 +1,21 @@
 import { SingletonDB } from "./model/Database";
 import * as express from 'express';
+import * as mNM from './middleware/middleModel';
+
 
 //import * as bodyParser from "bod"
 //const express = require("express");
 var app = express();
 //const bodyParser = require("body-parser");
 //const { LP, Options } = require('glpk.js');
-
+//app.use(express.json())
 //app.use(bodyParser.json());
 //app.use(bodyParser.urlencoded({ extended: false }));
 
 const PORT = 8080;
 const HOST = '0.0.0.0';
 
-function isJsonString(str) {
-    try {
-        JSON.parse(str);
-        return true;
-    } catch (e) {
-        return false;
-    }
-};
-
+/*
 function checkVars(objectField, res) {
     let flag = true;
     for (const item of objectField) {
@@ -254,7 +248,7 @@ app.use('/newModel', (req, res, next) => {
 
 
 //Controllo per Bounds? opzionale.
-
+/*
 app.use('/newModel', (req, res, next) => {
     let object = req.body.bounds;
     if (object) {
@@ -369,7 +363,9 @@ app.use('/newModel', (req,res, next) => {
     console.log(costoVar);
     next();
 })
+*/
 
 app.use('/', require("./routes/pages"));
+
 app.listen(PORT, HOST);
 console.log("Server partito porta 8080");
