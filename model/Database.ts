@@ -27,13 +27,11 @@ export class SingletonDB {
         if (!SingletonDB.instance) {
             SingletonDB.instance = new SingletonDB();
         }
-        console.log('istanza: '+ SingletonDB.instance);
 
         return SingletonDB.instance;
     }
 
     public getConnection() {
-        console.log('connessione: '+this.singleConnection);
         return this.singleConnection;        
     }
 
