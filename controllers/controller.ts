@@ -18,7 +18,6 @@ const options = {
 export class ModelController {
   public insertNewModel = async (req, res) => {
     try {
-      console.log("reqbody: " + req.body);
       let totalCost: number =
         auth.costContraint(req.body) + auth.checkBinOrInt(req.body);
       await model.insertModel(req.body, totalCost);
@@ -32,13 +31,11 @@ export class ModelController {
     }
   };
 
-  public solveModel = async (req, res) => {
-    let modelSolve: any = await model.checkExistingModel(
-      req.body.name,
-      req.body.version
-    );
-    let stringModel: string = JSON.stringify(modelSolve);
+  public filtraJSON = (json:any) => {
+    
+    let stringModel: string = JSON.stringify(json);
     let modelnew = JSON.parse(stringModel);
+    
     delete modelnew["id"];
     delete modelnew["cost"];
     delete modelnew["versione"];
@@ -52,10 +49,29 @@ export class ModelController {
       }
     });
     let modelnewstring: string = JSON.stringify(modelnew);
-    console.log(modelnewstring);
+   
     let modelJSON = JSON.parse(modelnewstring)
+    return modelJSON;
+  }
 
-    let solveModel = glpk.solve(modelJSON, options);
+  public solveModel = async (req, res) => {
+    try{
+    
+    let modelSolve: any = await model.checkExistingModel(
+      req.body.name,
+      req.body.version
+    );
+    
+    let solveModel = glpk.solve(this.filtraJSON(modelSolve), options);
+
+    //res.statusMessage= JSON.stringify(solveModel); 
+    res.sendStatus(JSON.stringify(solveModel)) // testing
+    //res.sendStatus(200);
+    }
+    catch(e){
+      console.log('non sono riuscito a risolvere');
+      res.sendStatus(400);
+    }
   };
 }
 export default ModelController;

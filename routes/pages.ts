@@ -10,9 +10,16 @@ const router = express.Router();
 let controller = new ModelController()
 router.use(express.json());
 
+router.use((err, req, res, next) => {
+  if (err instanceof SyntaxError && 'body' in err) {
+      res.sendStatus(400);
+  }
+  next();
+});
+
 router.use([auth.checkHeader, auth.checkToken, auth.verifyAndAuthenticate]);
 
-router.post("/newModel", auth.checkIsUser, auth.checkCredito, mNM.newModelValidation, async (req, res) => {
+router.post("/newModel", auth.checkUser, auth.checkIsUser, auth.checkCredito, mNM.newModelValidation, async (req, res) => {
   controller.insertNewModel(req, res);
 });
 

@@ -36,12 +36,13 @@ export function verifyAndAuthenticate(req, res, next) {
   }
 }
 
-async function checkUser(reqEmail) {
-  const email: any = await User.checkExistingUser(reqEmail);
-  if (email.email === reqEmail) {
-    return true;
+export async function checkUser(req,res,next) {
+  const user: any = await User.checkExistingUser(req.user.email);
+  if (user.email === req.user.email) {
+    next();
   } else {
-    return false;
+    res.sendStatus(404);
+    console.log('utente non trovato');
   }
 }
 
@@ -95,7 +96,7 @@ export async function checkCredito(req, res, next) {
     let object = req.body;
     let totalCost: number = costContraint(object) + checkBinOrInt(object);
     const budget: any = await User.getBudget(req.user.email);
-    if (budget.budget > totalCost && checkUser(req.user.email)) {
+    if (budget.budget > totalCost) {
       next();
     } else {
       res.sendStatus(401);
