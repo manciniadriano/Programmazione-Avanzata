@@ -7,5 +7,5 @@ CREATE TABLE users(
 );
 
 INSERT INTO users(email, budget, ruolo) VALUES
-('user@user', 100, 1),
-('admin@admin', 100, 2);
+('user@user.com', 100, 1),
+('admin@admin.com', 100, 2);

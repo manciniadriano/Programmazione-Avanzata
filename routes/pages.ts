@@ -10,7 +10,7 @@ router.use(express.json());
 
 router.use([auth.checkHeader, auth.checkToken, auth.verifyAndAuthenticate]);
 
-router.post("/newModel", auth.checkUser, auth.checkIsUser,auth.checkCredito, mNM.newModelValidation, async (req, res) => {
+router.post("/newModel", auth.checkUser, auth.checkIsUser, auth.checkCredito, mNM.newModelValidation, async (req, res) => {
   res.sendStatus(201);
 });
 

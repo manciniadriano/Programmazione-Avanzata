@@ -1,6 +1,5 @@
 import * as jwt from "jsonwebtoken";
 import * as sql from 'sequelize';
-import { Sequelize } from "sequelize";
 import { SingletonDB } from "../model/Database";
 import { User } from "../model/User";
 
@@ -35,6 +34,7 @@ export function verifyAndAuthenticate(req, res, next) {
 }
 
 export function checkUser(req, res, next) {
+  console.log(req.user.email);
   if (req.user.email === "user@user.com") {
     next();
   } else {
@@ -44,7 +44,7 @@ export function checkUser(req, res, next) {
 }
 
 export function checkIsUser(req, res, next) {
-  if (req.user.role === "2") {
+  if (req.user.role === "1") {
     next();
   } else {
     res.sendStatus(401);
@@ -53,7 +53,7 @@ export function checkIsUser(req, res, next) {
 }
 
 export function checkIsAdmin(req, res, next) {
-  if (req.role === "1") {
+  if (req.role === "2") {
     next();
   } else {
     res.sendStatus(401);
@@ -90,22 +90,24 @@ const valore = (variabile, object) => {
 
 export async function checkCredito(req, res, next) {
     try {
-        const connection = SingletonDB.getInstance().getConnection();
-        const budget = await connection.query(`SELECT budget FROM users WHERE email == ${req.user.email}`, {
+      console.log('Sono qui a fare checkCredito');
+        const connection= SingletonDB.getInstance().getConnection();
+        console.log(connection);
+        //SELECT budget FROM users WHERE email LIKE '%user%user.com'
+        const budget = await connection.query(`SELECT "budget" FROM "users" WHERE "email" = "${req.user.email}";`, {
             type: sql.QueryTypes.SELECT
         });
         console.log(budget)
         next();
     } catch (e) {
-        console.log('ciao errore query')
+        console.log('errore query')
         res.sendStatus(401);
     }
     let object = req.body;
     let costoVinc = costContraint(object);
     let costoVar = checkBinOrInt(object);
     let totalCost = costoVinc + costoVar;
-
-
+    console.log(totalCost);
     
     next();
 } 
