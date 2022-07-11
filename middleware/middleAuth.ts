@@ -23,17 +23,21 @@ export function checkToken(req, res, next) {
 }
 
 export function verifyAndAuthenticate(req, res, next) {
-  let decoded = jwt.verify(req.token, process.env.SECRET_KEY);
-  if (decoded !== null) {
-    req.user = decoded;
-    next();
-  } else {
+  try {
+    let decoded = jwt.verify(req.token, process.env.SECRET_KEY);
+    if (decoded !== null) {
+      req.user = decoded;
+      next();
+    } else {
+      res.sendStatus(401);
+    }
+  } catch (e) {
     res.sendStatus(401);
   }
 }
 
 async function checkUser(reqEmail) {
-  const email:any = await User.checkExistingUser(reqEmail);
+  const email: any = await User.checkExistingUser(reqEmail);
   if (email.email === reqEmail) {
     return true;
   } else {
