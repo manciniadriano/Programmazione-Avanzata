@@ -6,16 +6,19 @@ CREATE TABLE users(
   ruolo INT NOT NULL
 );
 
-CREATE TABLE model(
+CREATE TABLE models(
+  id SERIAL PRIMARY KEY,
   namemodel varchar(50) NOT NULL,
-  objective varchar(50) NOT NULL,
-  subjectTo varchar(50) NOT NULL,
-  bounds varchar(50) DEFAULT NULL,
-  binaries varchar(50) DEFAULT NULL,
-  generals varchar(50) DEFAULT NULL,
-  options varchar(50) DEFAULT NULL
+  objective json NOT NULL,
+  subjectTo json NOT NULL,
+  bounds json DEFAULT NULL,
+  binaries varchar(50)[] DEFAULT NULL,
+  generals varchar(50)[] DEFAULT NULL,
+  options json DEFAULT NULL,
+  versione INTEGER NOT NULL,
+  cost NUMERIC
 );
 
 INSERT INTO users(email, budget, ruolo) VALUES
-('user@user.com', 100, 1),
+('user@user.com', 5, 1),
 ('admin@admin.com', 100, 2);

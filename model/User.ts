@@ -1,15 +1,53 @@
-import { Options } from "glpk.js";
-import { ModelBuilder } from "./model-builder";
-import { LP } from "glpk.js";
+import { DataTypes, Model, Sequelize } from "sequelize";
+import { SingletonDB } from "../model/Database";
 
-export class User {
-    email: string;
-    budget: number;
-    role: number;
+const sequelize = SingletonDB.getInstance().getConnection();
 
-    constructor(email: string, budget: number, role: number) {
-        this.email = email;
-        this.budget = budget;
-        this.role = role;
+const User = sequelize.define(
+  "users",
+  {
+    email: {
+      type: DataTypes.STRING,
+      allowNull: false,
+    },
+    budget: {
+      type: DataTypes.FLOAT,
+      allowNull: false,
+    },
+    role: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+  },
+  {
+    modelName: "users",
+    timestamps: false
+  }
+);
+
+export async function getBudget(email: string) {
+  const budget = await User.findOne({
+    attributes: ["budget"],
+    where: { email: `${email}` },
+  });
+  return budget;
+}
+
+export async function checkExistingUser(email: string) {
+    const user = await User.findOne({
+        attributes: ["email"],
+        where: { email: `${email}` },
+      });
+      return user;
+}
+
+export async function budgetUpdate(newBudget: Number, email: string) {
+  const user = await User.update(
+    {
+      budget : newBudget,
+    }, 
+    {
+      where: {email : `${email}`},
     }
+    );
 }

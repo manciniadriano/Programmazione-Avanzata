@@ -1,8 +1,7 @@
 import * as jwt from "jsonwebtoken";
 import * as sql from "sequelize";
 import { SingletonDB } from "../model/Database";
-import { User } from "../model/User";
-
+import * as User from "../model/User";
 export var checkHeader = function (req, res, next) {
   const authHeader = req.headers.authorization;
   if (authHeader) {
@@ -33,13 +32,12 @@ export function verifyAndAuthenticate(req, res, next) {
   }
 }
 
-export function checkUser(req, res, next) {
-  console.log(req.user.email);
-  if (req.user.email === "user@user.com") {
-    next();
+async function checkUser(reqEmail) {
+  const email:any = await User.checkExistingUser(reqEmail);
+  if (email.email === reqEmail) {
+    return true;
   } else {
-    res.sendStatus(401);
-    console.log("User");
+    return false;
   }
 }
 
@@ -90,23 +88,15 @@ export const valore = (variabile, object) => {
 
 export async function checkCredito(req, res, next) {
   try {
-    const connection = SingletonDB.getInstance().getConnection();
     let object = req.body;
     let totalCost: number = costContraint(object) + checkBinOrInt(object);
-    const [budget]: any = await connection.query(
-      `SELECT "budget" FROM "users" WHERE "email" = '${req.user.email}';`,
-      {
-        type: sql.QueryTypes.SELECT,
-      }
-    );
-    if (budget && budget.budget > totalCost) {
+    const budget: any = await User.getBudget(req.user.email);
+    if (budget.budget > totalCost && checkUser(req.user.email)) {
       next();
     } else {
       res.sendStatus(401);
-      console.log("non presente o budget insufficiente");
     }
   } catch (e) {
-    console.log("errore query");
     res.sendStatus(401);
   }
 }
