@@ -93,21 +93,29 @@ export async function checkCredito(req, res, next) {
       console.log('Sono qui a fare checkCredito');
         const connection= SingletonDB.getInstance().getConnection();
         console.log(connection);
-        //SELECT budget FROM users WHERE email LIKE '%user%user.com'
-        const budget = await connection.query(`SELECT "budget" FROM "users" WHERE "email" = "${req.user.email}";`, {
+        let object = req.body;
+        let costoVinc = costContraint(object);
+        let costoVar = checkBinOrInt(object);
+        let totalCost = costoVinc + costoVar;
+        const budget = await connection.query(`SELECT "budget" FROM "users" WHERE "email" = '${req.user.email}';`, {
             type: sql.QueryTypes.SELECT
         });
-        console.log(budget)
-        next();
+        if(budget.length){
+        if(budget[0].budget>totalCost){
+          next();
+        }
+      
+        else{
+          console.log('credito insufficiente')
+          res.sendStatus(401);
+        }
+      }else{
+        console.log('email non sufficiente')
+          res.sendStatus(401);
+
+      }
     } catch (e) {
         console.log('errore query')
         res.sendStatus(401);
     }
-    let object = req.body;
-    let costoVinc = costContraint(object);
-    let costoVar = checkBinOrInt(object);
-    let totalCost = costoVinc + costoVar;
-    console.log(totalCost);
-    
-    next();
 } 
