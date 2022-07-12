@@ -6,15 +6,6 @@ import { Model } from "sequelize/types";
 const GLPK = require("glpk.js");
 const glpk = GLPK();
 
-const options = {
-  msglev: glpk.GLP_MSG_ALL,
-  presol: true,
-  cb: {
-    call: (progress) => console.log(progress),
-    each: 1,
-  },
-};
-
 export class ModelController {
   public insertNewModel = async (req, res) => {
     try {
@@ -61,10 +52,11 @@ export class ModelController {
       req.body.name,
       req.body.version
     );
+
     
-    let solveModel = glpk.solve(this.filtraJSON(modelSolve), options);
+      let solveModel = glpk.solve(this.filtraJSON(modelSolve), modelSolve.options);
+      res.status(200).send(JSON.stringify(solveModel));
     
-    res.status(200).send(JSON.stringify(solveModel));
 
     }
     catch(e){

@@ -1,6 +1,8 @@
 import { DataTypes, IntegerDataType, Model, Sequelize } from "sequelize";
 import { SingletonDB } from "../model/Database";
-
+import {Options} from "./Options"
+const GLPK = require("glpk.js");
+const glpk = GLPK();
 const sequelize = SingletonDB.getInstance().getConnection();
 
 const ModelOpt = sequelize.define(
@@ -33,6 +35,16 @@ const ModelOpt = sequelize.define(
     options: {
       type: DataTypes.JSON,
       allowNull: true,
+      defaultValue: {
+        mipgap: 0.0,
+        tmlim: Number.MAX_VALUE,
+        msglev: glpk.GLP_MSG_ERR,
+        presol: true,
+        cb: {
+          call: (progress) => console.log(progress),
+          each: 1,
+        },
+      }
     },
     versione: {
       type: DataTypes.INTEGER,
@@ -50,6 +62,7 @@ const ModelOpt = sequelize.define(
 );
 
 export async function insertModel(object: any, cost: number) {
+  //const options= new Options()
   const model = await ModelOpt.create({
     namemodel: object.name,
     objective: object.objective,
