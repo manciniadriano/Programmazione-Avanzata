@@ -63,10 +63,9 @@ export class ModelController {
     );
     
     let solveModel = glpk.solve(this.filtraJSON(modelSolve), options);
+    
+    res.status(200).send(JSON.stringify(solveModel));
 
-    //res.statusMessage= JSON.stringify(solveModel); 
-    res.sendStatus(JSON.stringify(solveModel)) // testing
-    //res.sendStatus(200);
     }
     catch(e){
       console.log('non sono riuscito a risolvere');
