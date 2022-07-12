@@ -14,14 +14,14 @@ const User = sequelize.define(
       type: DataTypes.FLOAT,
       allowNull: false,
     },
-    role: {
+    ruolo: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
   },
   {
     modelName: "users",
-    timestamps: false
+    timestamps: false,
   }
 );
 
@@ -34,20 +34,20 @@ export async function getBudget(email: string) {
 }
 
 export async function checkExistingUser(email: string) {
-    const user = await User.findOne({
-        attributes: ["email"],
-        where: { email: `${email}` },
-      });
-      return user;
+  const user = await User.findOne({
+    attributes: ['email', 'ruolo'],
+    where: { email: email },
+  });
+  return user;
 }
 
 export async function budgetUpdate(newBudget: Number, email: string) {
   const user = await User.update(
     {
-      budget : newBudget,
-    }, 
+      budget: newBudget,
+    },
     {
-      where: {email : `${email}`},
+      where: { email: `${email}` },
     }
-    );
+  );
 }

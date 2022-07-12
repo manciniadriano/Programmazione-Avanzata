@@ -42,7 +42,7 @@ export async function checkUser(req, res, next) {
     next();
   } else {
     res.sendStatus(404);
-    console.log('utente non trovato');
+    console.log("utente non trovato");
   }
 }
 
@@ -105,14 +105,3 @@ export async function checkCredito(req, res, next) {
     res.sendStatus(401);
   }
 }
-
-  export async function CheckReceiver(req, res, next) {
-    const user: any = await User.checkExistingUser(req.user.emailuser);
-    if ((user.email === req.user.emailuser)&&(user.role===2)) {
-      next();
-    } else {
-      res.sendStatus(404);
-      console.log('utente non trovato o non è uno user');
-    }
-
-  }

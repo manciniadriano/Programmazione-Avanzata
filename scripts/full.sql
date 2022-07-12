@@ -16,7 +16,8 @@ CREATE TABLE models(
   generals varchar(50)[] DEFAULT NULL,
   options json DEFAULT NULL,
   versione INTEGER NOT NULL,
-  cost NUMERIC
+  cost NUMERIC,
+  creation_date varchar(50) NOT NULL
 );
 
 INSERT INTO users(email, budget, ruolo) VALUES
