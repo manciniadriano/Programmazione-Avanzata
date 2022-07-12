@@ -151,17 +151,9 @@ export async function filterByDate(name: string, date: string) {
   return models;
 }
 
-export async function filterByNumberVars(numbvars: number) {
+export async function getReviewOfModel(name: string) {
   const models = await ModelOpt.findAll({
-    where: {versione: {[Op.gt] : 1} }
-  })/*.then(function(object) {
-    for (const item of object.models.dataValues)
-    console.log(object.models.objective);
-    //let objective = object.objective;
-    /*for(const item of objective){
-      if (item.vars.length === numbvars ){
-
-      }
-    }*/
+    where: { namemodel: name, versione: { [Op.gt]: 1 } },
+  });
   return models;
 }

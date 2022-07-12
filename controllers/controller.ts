@@ -3,6 +3,7 @@ import * as auth from "../middleware/middleAuth";
 import * as model from "../model/Model";
 import { Model } from "sequelize/types";
 import { send } from "process";
+import { checkObjective } from "../middleware/helpFunction/middleModFun";
 
 const GLPK = require("glpk.js");
 const glpk = GLPK();
@@ -104,14 +105,26 @@ export class ModelController {
     }
   };
 
+
+  /**
+   * struttura json esempio: {"name": "namemodel", "number":3} number sarebbe il numero di variabili 
+   * @param req 
+   * @param res 
+   */
   public filterByNumVars = async (req, res) => {
     try {
-      let models: any = model.filterByNumberVars(3);
-      res.send(models);
+      let models: any = await model.getReviewOfModel(req.body.name);
+      let modelsF: any = models
+        .map((item) => this.filtraJSON(item))
+        .filter((item) => item.objective.vars.length == req.body.number);
+      console.log(models);
+      console.log(modelsF);
+
+      res.send(modelsF);
     } catch (e) {
-      res.sendStatus(404)
+      res.sendStatus(404);
     }
-  }
+  };
 }
 
 export default ModelController;
