@@ -65,6 +65,7 @@ export const isJsonString = (obj: any) => {
  *  Return: Boolean indicating if is well formatted
  */
 export const checkName = (field: string) => {
+
   if (field && typeof field === "string") {
     return true;
   } else {

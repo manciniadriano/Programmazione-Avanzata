@@ -1,6 +1,6 @@
 import { DataTypes, IntegerDataType, Model, Sequelize } from "sequelize";
 import { SingletonDB } from "../model/Database";
-import {Options} from "./Options"
+import { OptionsBuilder } from "./OptionsBuilder";
 const GLPK = require("glpk.js");
 const glpk = GLPK();
 const sequelize = SingletonDB.getInstance().getConnection();
@@ -62,19 +62,41 @@ const ModelOpt = sequelize.define(
 );
 
 export async function insertModel(object: any, cost: number) {
-  //const options= new Options()
-  const model = await ModelOpt.create({
-    namemodel: object.name,
-    objective: object.objective,
-    subjectto: object.subjectTo,
-    bounds: object.bounds,
-    binaries: object.binaries,
-    generals: object.generals,
-    options: object.options,
-    versione: 1,
-    cost:cost
+
+  var search = await ModelOpt.findOne({
+    where: { namemodel: `${object.name}` },
   });
-  return model;
+
+  if (!search) {
+    if (object.options) {
+
+      var options = new OptionsBuilder()
+        .setmipgap(object.options.mipgap)
+        .settmlim(object.options.tmlim)
+        .setmsglev(object.options.msglev)
+        .setpresol(object.options.presol)
+        .setcb(object.options.cb);
+    }
+    else {
+      var options = new OptionsBuilder();
+    }
+
+    const model = await ModelOpt.create({
+      namemodel: object.name,
+      objective: object.objective,
+      subjectto: object.subjectTo,
+      bounds: object.bounds,
+      binaries: object.binaries,
+      generals: object.generals,
+      options: options,
+      versione: 1,
+      cost: cost
+    });
+    return model;
+  }
+  else {
+    return false;
+  }
 }
 
 export async function checkExistingModel(name: string, version: number) {
@@ -83,7 +105,7 @@ export async function checkExistingModel(name: string, version: number) {
       where: { namemodel: `${name}`, versione: version },
     });
   } else {
-    const lastVersion: number = await ModelOpt.max('versione', { where: { namemodel : name } })
+    const lastVersion: number = await ModelOpt.max('versione', { where: { namemodel: name } })
     var model = await ModelOpt.findOne({
       where: { namemodel: name, versione: lastVersion },
     });

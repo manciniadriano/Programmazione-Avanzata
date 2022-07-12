@@ -11,22 +11,28 @@ export class ModelController {
     try {
       let totalCost: number =
         auth.costContraint(req.body) + auth.checkBinOrInt(req.body);
-      await model.insertModel(req.body, totalCost);
-      let oldBudget: any = await user.getBudget(req.user.email);
-      let newBudget = oldBudget.budget - totalCost;
-      await user.budgetUpdate(newBudget, req.user.email);
-      res.sendStatus(201);
+      var flag = await model.insertModel(req.body, totalCost);
+      if (flag) {
+        let oldBudget: any = await user.getBudget(req.user.email);
+        let newBudget = oldBudget.budget - totalCost;
+        await user.budgetUpdate(newBudget, req.user.email);
+        res.sendStatus(201);
+      }
+      else {
+        console.log('modello con questo nome già esistente');
+        res.sendStatus(400);
+      }
     } catch {
       console.log("errore");
       res.sendStatus(400);
     }
   };
 
-  public filtraJSON = (json:any) => {
-    
+  public filtraJSON = (json: any) => {
+
     let stringModel: string = JSON.stringify(json);
     let modelnew = JSON.parse(stringModel);
-    
+
     delete modelnew["id"];
     delete modelnew["cost"];
     delete modelnew["versione"];
@@ -40,29 +46,36 @@ export class ModelController {
       }
     });
     let modelnewstring: string = JSON.stringify(modelnew);
-   
+
     let modelJSON = JSON.parse(modelnewstring)
     return modelJSON;
   }
 
   public solveModel = async (req, res) => {
-    try{
-    
-    let modelSolve: any = await model.checkExistingModel(
-      req.body.name,
-      req.body.version
-    );
+    try {
 
-    
+      let modelSolve: any = await model.checkExistingModel(
+        req.body.name,
+        req.body.version
+      );
       let solveModel = glpk.solve(this.filtraJSON(modelSolve), modelSolve.options);
       res.status(200).send(JSON.stringify(solveModel));
-    
-
     }
-    catch(e){
+    catch (e) {
       console.log('non sono riuscito a risolvere');
       res.sendStatus(400);
     }
+  };
+
+  public creditCharge = async (req, res) => {
+    if (req.user.budget > 0) {
+      user.budgetUpdate(req.user.budget, req.user.emailuser);
+      res.sendStatus(200);
+    }
+    else {
+      res.sendStatus(400);
+    }
+
   };
 }
 export default ModelController;

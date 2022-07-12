@@ -36,7 +36,7 @@ export function verifyAndAuthenticate(req, res, next) {
   }
 }
 
-export async function checkUser(req,res,next) {
+export async function checkUser(req, res, next) {
   const user: any = await User.checkExistingUser(req.user.email);
   if (user.email === req.user.email) {
     next();
@@ -56,7 +56,7 @@ export function checkIsUser(req, res, next) {
 }
 
 export function checkIsAdmin(req, res, next) {
-  if (req.role === "2") {
+  if (req.user.role === "2") {
     next();
   } else {
     res.sendStatus(401);
@@ -105,3 +105,14 @@ export async function checkCredito(req, res, next) {
     res.sendStatus(401);
   }
 }
+
+  export async function CheckReceiver(req, res, next) {
+    const user: any = await User.checkExistingUser(req.user.emailuser);
+    if ((user.email === req.user.emailuser)&&(user.role===2)) {
+      next();
+    } else {
+      res.sendStatus(404);
+      console.log('utente non trovato o non è uno user');
+    }
+
+  }

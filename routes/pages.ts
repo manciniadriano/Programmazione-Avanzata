@@ -27,4 +27,8 @@ router.post("/solveModel", solve.checkSolve, solve.checkCreditoSolve, async (req
   controller.solveModel(req, res)
 });
 
+router.post("/admin", auth.checkUser, auth.checkIsAdmin, auth.CheckReceiver, async (req, res) => {
+  controller.creditCharge(req,res)
+});
+
 module.exports = router;
