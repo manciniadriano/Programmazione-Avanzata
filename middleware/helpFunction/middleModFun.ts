@@ -1,5 +1,3 @@
-import { type } from "os";
-
 const checkDirection = (field) => {
   if (field && typeof Number.isInteger(field) && (field === 1 || field === 2)) {
     return true;

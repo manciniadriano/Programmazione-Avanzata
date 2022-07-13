@@ -58,11 +58,11 @@ const ModelOpt = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    valid:{
+    valid: {
       type: DataTypes.BOOLEAN,
-      allowNull:true,
-      defaultValue:true,
-    }
+      allowNull: true,
+      defaultValue: true,
+    },
   },
   {
     modelName: "models",
@@ -151,29 +151,53 @@ export async function insertReview(object: any, version: number, cost: number) {
 
 export async function filterByDate(name: string, date: string) {
   const models = await ModelOpt.findAll({
-    where: { namemodel: name, creation_date: date, versione: { [Op.gt]: 1 } },
+    where: {
+      namemodel: name,
+      creation_date: date,
+      versione: { [Op.gt]: 1 },
+      valid: { [Op.eq]: true },
+    },
   });
   return models;
 }
 
 export async function getReviewOfModel(name: string) {
   const models = await ModelOpt.findAll({
-    where: { namemodel: name, versione: { [Op.gt]: 1 } },
+    where: {
+      namemodel: name,
+      versione: { [Op.gt]: 1 },
+      valid: { [Op.eq]: true },
+    },
   });
   return models;
 }
 
-export async function getModels(){
+export async function getModels() {
   const models = await ModelOpt.findAll({
     where: { versione: { [Op.eq]: 1 } },
   });
   return models;
 }
 
-export async function deleteModel(name:string, version:number){
-  const models= await ModelOpt.update(
-    {valid:false},
-    {where: {namemodel: name, versione: version}
-  })
+export async function deleteModel(name: string, version: number) {
+  const models = await ModelOpt.update(
+    { valid: false },
+    { where: { namemodel: name, versione: version, valid: { [Op.eq]: true } } }
+  );
+  return models;
+}
+
+export async function getDeletedReview() {
+  const models = await ModelOpt.findAll({
+    where: { valid: { [Op.eq]: false } },
+  });
+  return models;
+}
+
+export async function restoreReview(name: string, version: number) {
+  const models = await ModelOpt.update(
+    { valid: true },
+    { where: { namemodel: name, versione: version, valid: { [Op.eq]: false } } }
+  );
   return models;
 }

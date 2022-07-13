@@ -44,7 +44,6 @@ export class ModelController {
     delete modelnew.namemodel;
 
     modelnew.subjectTo = modelnew.subjectto;
-
     delete modelnew.subjectto;
 
     Object.keys(modelnew).forEach((key) => {
@@ -54,7 +53,6 @@ export class ModelController {
     });
 
     let modelnewstring: string = JSON.stringify(modelnew);
-
 
     return JSON.parse(modelnewstring);
   };
@@ -106,17 +104,20 @@ export class ModelController {
 
   public filterReviewByDate = async (req, res) => {
     try {
-
-      if (typeof (req.body.date) === "string" && typeof (req.body.name) === "string") {
-
-        let models: any = await model.filterByDate(req.body.name, req.body.date);
+      if (
+        typeof req.body.date === "string" &&
+        typeof req.body.name === "string"
+      ) {
+        let models: any = await model.filterByDate(
+          req.body.name,
+          req.body.date
+        );
 
         let modelsF: any = models.map((item) => this.filtraJSON(item));
 
         res.status(200).json(modelsF);
-      }
-      else {
-        console.log('non stai dando dati corretti');
+      } else {
+        console.log("non stai dando dati corretti");
         res.sendStatus(400);
       }
     } catch (e) {
@@ -124,24 +125,25 @@ export class ModelController {
     }
   };
 
-
   /**
-   * struttura json esempio: {"name": "namemodel", "number":3} number sarebbe il numero di variabili 
-   * @param req 
-   * @param res 
+   * struttura json esempio: {"name": "namemodel", "number":3} number sarebbe il numero di variabili
+   * @param req
+   * @param res
    */
   public filterByNumVars = async (req, res) => {
     try {
-      if (typeof (req.body.name) === "string" && typeof (req.body.number) === "number") {
+      if (
+        typeof req.body.name === "string" &&
+        typeof req.body.number === "number"
+      ) {
         let models: any = await model.getReviewOfModel(req.body.name);
         let modelsF: any = models
           .map((item) => this.filtraJSON(item))
           .filter((item) => item.objective.vars.length === req.body.number);
 
         res.send(modelsF);
-      }
-      else {
-        console.log('non stai dando dati corretti');
+      } else {
+        console.log("non stai dando dati corretti");
         res.sendStatus(400);
       }
     } catch (e) {
@@ -152,70 +154,74 @@ export class ModelController {
   public filterPlus = async (req, res) => {
     try {
       let models: any = await model.getModels();
-      let modelsF: any = models.map((item) => this.filtraJSON(item))
+      let modelsF: any = models
+        .map((item) => this.filtraJSON(item))
         .filter((item) => {
           if (req.body.numvars) {
-            return item.objective.vars.length === req.body.numvars
-          }
-          else return true;
+            return item.objective.vars.length === req.body.numvars;
+          } else return true;
         })
         .filter((item) => {
           if (req.body.numsub) {
-            return item.subjectTo.length === req.body.numsub
-          }
-          else return true;
+            return item.subjectTo.length === req.body.numsub;
+          } else return true;
         })
         .filter((item) => {
           if (req.body.vartype === 1) {
-
             if (!(item.generals === undefined)) {
-
               return item.generals.length === item.objective.vars.length;
-            }
-            else return false;
-          }
-
-          else return true;
+            } else return false;
+          } else return true;
         })
         .filter((item) => {
           if (req.body.vartype === 2) {
-
             if (!(item.binaries === undefined)) {
-
               return item.binaries.length === item.objective.vars.length;
-            }
-            else return false;
-          }
-
-          else return true;
-
+            } else return false;
+          } else return true;
         })
         .filter((item) => {
           if (req.body.vartype === 3) {
-            return (item.generals === undefined) && (item.binaries === undefined)
-          }
-          else return true;
+            return item.generals === undefined && item.binaries === undefined;
+          } else return true;
         });
       res.send(modelsF);
     } catch (e) {
       res.sendStatus(400);
     }
-  }
+  };
 
   public deleteReview = async (req, res) => {
     try {
       if (req.body.version > 1) {
         await model.deleteModel(req.body.name, req.body.version);
         res.sendStatus(200);
-      }
-      else res.sendStatus(400);
-    }
-    catch (e) {
+      } else res.sendStatus(400);
+    } catch (e) {
       res.sendStatus(404);
     }
+  };
 
-  }
+  public getDeletedReview = async (req, res) => {
+    try {
+      let models: any = await model.getDeletedReview();
+      let modelsF: any = models.map((item) => this.filtraJSON(item));
+      res.send(modelsF);
+    } catch {
+      res.sendStatus(404);
+    }
+  };
 
+  public restoreReview = async (req, res) => {
+    try {
+      if (req.body.version > 1) {
+        await model.restoreReview(req.body.name, req.body.version);
+        res.sendStatus(200);
+      } else res.sendStatus(400);
+    } catch (e) {
+      res.sendStatus(404);
+    }
+  };
 }
 
 export default ModelController;
