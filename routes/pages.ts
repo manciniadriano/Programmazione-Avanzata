@@ -2,12 +2,14 @@ import * as mNM from "../middleware/middleModel";
 import * as auth from "../middleware/middleAuth";
 import * as solve from "../middleware/middleSolve";
 import * as admin from "../middleware/middleAdmin";
-import ModelController from "../controllers/controller";
+import ModelController from "../controllers/controllerModel";
+import { ReviewController } from "../controllers/controllerReview";
 
 const express = require("express");
 const router = express.Router();
 
-let controller = new ModelController();
+let cntrModel = new ModelController();
+let cntrReview = new ReviewController();
 router.use(express.json());
 
 router.use((err, req, res, next) => {
@@ -19,13 +21,7 @@ router.use((err, req, res, next) => {
 
 router.use([auth.checkHeader, auth.checkToken, auth.verifyAndAuthenticate]);
 
-router.get("*", async (req, res) => {
-  res.sendStatus(404);
-});
 
-router.post("*", async (req, res) => {
-  res.sendStatus(404);
-});
 
 router.post(
   "/newModel",
@@ -33,7 +29,7 @@ router.post(
   auth.checkCredito,
   mNM.newModelValidation,
   async (req, res) => {
-    controller.insertNewModel(req, res);
+    cntrModel.insertNewModel(req, res);
   }
 );
 
@@ -43,7 +39,7 @@ router.post(
   solve.checkSolve,
   solve.checkCreditoSolve,
   async (req, res) => {
-    controller.solveModel(req, res);
+    cntrModel.solveModel(req, res);
   }
 );
 
@@ -52,7 +48,7 @@ router.post(
   admin.checkAdmin,
   admin.CheckReceiver,
   async (req, res) => {
-    controller.creditCharge(req, res);
+    cntrModel.creditCharge(req, res);
   }
 );
 
@@ -62,32 +58,40 @@ router.post(
   auth.checkCredito,
   mNM.newModelValidation,
   async (req, res) => {
-    controller.newReview(req, res);
+    cntrReview.newReview(req, res);
   }
 );
 
 router.get("/filterReviewDate", auth.checkUser, async (req, res) => {
-  controller.filterReviewByDate(req, res);
+  cntrReview.filterReviewByDate(req, res);
 });
 
 router.get("/filterNumVars", auth.checkUser, async (req, res) => {
-  controller.filterByNumVars(req, res);
+  cntrReview.filterByNumVars(req, res);
 });
 
 router.get("/filterModels", auth.checkUser, async (req, res) => {
-  controller.filterPlus(req, res);
+  cntrModel.filterPlus(req, res);
 });
 
 router.post("/deleteReview", auth.checkUser, async (req, res) => {
-  controller.deleteReview(req, res);
+  cntrReview.deleteReview(req, res);
 });
 
 router.get("/getDeletedReview", auth.checkUser, async (req, res) => {
-  controller.getDeletedReview(req, res);
+  cntrReview.getDeletedReview(req, res);
 });
 
 router.post("/restoreReview", auth.checkUser, async (req, res) => {
-  controller.restoreReview(req, res);
+  cntrReview.restoreReview(req, res);
+});
+
+router.get("*", async (req, res) => {
+  res.sendStatus(404);
+});
+
+router.post("*", async (req, res) => {
+  res.sendStatus(404);
 });
 
 module.exports = router;

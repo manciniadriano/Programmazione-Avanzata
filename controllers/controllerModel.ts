@@ -1,9 +1,6 @@
 import * as user from "../model/User";
 import * as auth from "../middleware/middleAuth";
 import * as model from "../model/Model";
-import { Model } from "sequelize/types";
-import { send } from "process";
-import { checkObjective } from "../middleware/helpFunction/middleModFun";
 
 const GLPK = require("glpk.js");
 const glpk = GLPK();
@@ -40,21 +37,18 @@ export class ModelController {
     delete modelnew["options"];
     delete modelnew["valid"];
 
-    modelnew.name = modelnew.namemodel;
-    delete modelnew.namemodel;
+    let s = JSON.stringify(modelnew);
+    var t = s.replace(/"namemodel"/g, '"name"');
+    var z = t.replace(/"subjectto"/g, '"subjectTo"');
 
-    modelnew.subjectTo = modelnew.subjectto;
-    delete modelnew.subjectto;
-
-    Object.keys(modelnew).forEach((key) => {
-      if (modelnew[key] === null) {
-        delete modelnew[key];
+    let modelFiltered = JSON.parse(z);
+    Object.keys(modelFiltered).forEach((key) => {
+      if (modelFiltered[key] === null) {
+        delete modelFiltered[key];
       }
     });
 
-    let modelnewstring: string = JSON.stringify(modelnew);
-
-    return JSON.parse(modelnewstring);
+    return modelFiltered;
   };
 
   public solveModel = async (req, res) => {
