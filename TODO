@@ -1,0 +1,5 @@
+separare controller, MODEL, REVIEW, SOLVE (singleton?)
+middleware inglobare modelValidatior.ts in middleModel
+completare i controlli su createModel
+modello RESULT(? necessario)
+spostare checkAdmin in middleAdmin

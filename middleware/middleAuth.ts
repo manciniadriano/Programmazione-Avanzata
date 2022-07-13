@@ -45,15 +45,6 @@ export async function checkUser(req, res, next) {
   }
 }
 
-export async function checkAdmin(req, res, next) {
-  const user: any = await User.checkExistingUser(req.user.email);
-  if (user.email === req.user.email && user.ruolo === 2) {
-    next();
-  } else {
-    res.sendStatus(401);
-  }
-}
-
 export const costContraint = (object) => {
   let c = object.subjectTo.length;
   if (object.bounds) {

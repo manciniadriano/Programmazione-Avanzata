@@ -49,7 +49,7 @@ router.post(
 
 router.post(
   "/admin",
-  auth.checkAdmin,
+  admin.checkAdmin,
   admin.CheckReceiver,
   async (req, res) => {
     controller.creditCharge(req, res);
