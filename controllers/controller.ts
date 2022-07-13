@@ -38,17 +38,25 @@ export class ModelController {
     delete modelnew["versione"];
     delete modelnew["creation_date"];
     delete modelnew["options"];
+    delete modelnew["valid"];
+
     modelnew.name = modelnew.namemodel;
     delete modelnew.namemodel;
+
     modelnew.subjectTo = modelnew.subjectto;
+
     delete modelnew.subjectto;
-    let modelJSON = JSON.parse(JSON.stringify(modelnew, ["name", "objective", "subjecTto", "bounds", "binaries", "generals", "options"]));
-    Object.keys(modelJSON).forEach((key) => {
-      if (modelJSON[key] === null) {
-        delete modelJSON[key];
+
+    Object.keys(modelnew).forEach((key) => {
+      if (modelnew[key] === null) {
+        delete modelnew[key];
       }
     });
-    return modelJSON;
+
+    let modelnewstring: string = JSON.stringify(modelnew);
+
+
+    return JSON.parse(modelnewstring);
   };
 
   public solveModel = async (req, res) => {
@@ -140,57 +148,73 @@ export class ModelController {
       res.sendStatus(404);
     }
   };
-  public filterModels = async (req, res) => {
+
+  public filterPlus = async (req, res) => {
     try {
-      if (req.body.numvars) {
-        let models: any = await model.getModels();
-        let modelsF: any = models.map((item) => this.filtraJSON(item)).filter((item) => item.objective.vars.length === req.body.numvars);
-        res.send(modelsF);
-      }
-      else {
-        console.log('non ho dato un numvars');
+      let models: any = await model.getModels();
+      let modelsF: any = models.map((item) => this.filtraJSON(item))
+        .filter((item) => {
+          if (req.body.numvars) {
+            return item.objective.vars.length === req.body.numvars
+          }
+          else return true;
+        })
+        .filter((item) => {
+          if (req.body.numsub) {
+            return item.subjectTo.length === req.body.numsub
+          }
+          else return true;
+        })
+        .filter((item) => {
+          if (req.body.vartype === 1) {
 
-      }
+            if (!(item.generals === undefined)) {
 
-      if (req.body.numsub) {
-        let models: any = await model.getModels();
-        let modelsF: any = models.map((item) => this.filtraJSON(item)).filter((item) => item.subjectTo.length === req.body.numsub);
-        res.send(modelsF);
-      }
-      else {
-        console.log('non ho dato un numsub');
+              return item.generals.length === item.objective.vars.length;
+            }
+            else return false;
+          }
 
-      }
+          else return true;
+        })
+        .filter((item) => {
+          if (req.body.vartype === 2) {
 
-      if (req.body.vartype) {
-        if (req.body.vartype === 1) {
-          let models: any = await model.getModels();
-          let modelsF: any = models.map((item) => this.filtraJSON(item)).filter((item) => item.generals.length === item.objective.vars.length);
-          res.send(modelsF);
-        }
-        if (req.body.vartype === 2) {
-          let models: any = await model.getModels();
-          let modelsF: any = models.map((item) => this.filtraJSON(item)).filter((item) => item.binaries.length === item.objective.vars.length);
-          res.send(modelsF);
-        }
-        if (req.body.vartype === 3) {
-          let models: any = await model.getModels();
-          let modelsF: any = models.map((item) => this.filtraJSON(item)).filter((item) => item.generals.length === 0).filter((item) => item.binaries.length === 0);
-          res.send(modelsF);
-        }
-      }
-      else {
-        console.log('non ho dato un numvars');
+            if (!(item.binaries === undefined)) {
 
-      }
+              return item.binaries.length === item.objective.vars.length;
+            }
+            else return false;
+          }
 
+          else return true;
 
+        })
+        .filter((item) => {
+          if (req.body.vartype === 3) {
+            return (item.generals === undefined) && (item.binaries === undefined)
+          }
+          else return true;
+        });
+      res.send(modelsF);
     } catch (e) {
-      res.sendStatus(404);
+      res.sendStatus(400);
     }
   }
 
+  public deleteReview = async (req, res) => {
+    try {
+      if (req.body.version > 1) {
+        await model.deleteModel(req.body.name, req.body.version);
+        res.sendStatus(200);
+      }
+      else res.sendStatus(400);
+    }
+    catch (e) {
+      res.sendStatus(404);
+    }
 
+  }
 
 }
 

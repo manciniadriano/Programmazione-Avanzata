@@ -58,6 +58,11 @@ const ModelOpt = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    valid:{
+      type: DataTypes.BOOLEAN,
+      allowNull:true,
+      defaultValue:true,
+    }
   },
   {
     modelName: "models",
@@ -162,5 +167,13 @@ export async function getModels(){
   const models = await ModelOpt.findAll({
     where: { versione: { [Op.eq]: 1 } },
   });
+  return models;
+}
+
+export async function deleteModel(name:string, version:number){
+  const models= await ModelOpt.update(
+    {valid:false},
+    {where: {namemodel: name, versione: version}
+  })
   return models;
 }

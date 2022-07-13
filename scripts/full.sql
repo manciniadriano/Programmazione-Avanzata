@@ -8,7 +8,7 @@ CREATE TABLE users(
 
 CREATE TABLE models(
   id SERIAL PRIMARY KEY,
-  name varchar(50) NOT NULL,
+  namemodel varchar(50) NOT NULL,
   objective json NOT NULL,
   subjectTo json NOT NULL,
   bounds json DEFAULT NULL,
@@ -17,7 +17,8 @@ CREATE TABLE models(
   options json DEFAULT NULL,
   versione INTEGER NOT NULL,
   cost NUMERIC,
-  creation_date varchar(50) NOT NULL
+  creation_date varchar(50) NOT NULL,
+  valid boolean
 );
 
 INSERT INTO users(email, budget, ruolo) VALUES

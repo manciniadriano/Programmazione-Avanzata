@@ -45,7 +45,15 @@ router.get("/filterNumVars", auth.checkUser, auth.checkIsUser, async (req, res) 
 })
 
 router.get("/filterModels", auth.checkUser, auth.checkIsUser, async (req, res) => {
-  controller.filterModels(req,res);
+  controller.filterPlus(req,res);
+})
+
+router.post("/deleteReview", auth.checkUser, auth.checkIsUser, async (req, res) => {
+  controller.deleteReview(req,res);
+})
+
+router.get("/", auth.checkUser, auth.checkIsUser, async (req, res) => {
+  controller.filterReviewByDate(req, res);
 })
 
 module.exports = router;
