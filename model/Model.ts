@@ -25,11 +25,11 @@ const ModelOpt = sequelize.define(
       allowNull: true,
     },
     binaries: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
+      type: DataTypes.JSON,
       allowNull: true,
     },
     generals: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
+      type: DataTypes.JSON,
       allowNull: true,
     },
     options: {
@@ -154,6 +154,13 @@ export async function filterByDate(name: string, date: string) {
 export async function getReviewOfModel(name: string) {
   const models = await ModelOpt.findAll({
     where: { namemodel: name, versione: { [Op.gt]: 1 } },
+  });
+  return models;
+}
+
+export async function getModels(){
+  const models = await ModelOpt.findAll({
+    where: { versione: { [Op.eq]: 1 } },
   });
   return models;
 }

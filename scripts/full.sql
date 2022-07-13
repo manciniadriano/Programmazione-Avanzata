@@ -8,12 +8,12 @@ CREATE TABLE users(
 
 CREATE TABLE models(
   id SERIAL PRIMARY KEY,
-  namemodel varchar(50) NOT NULL,
+  name varchar(50) NOT NULL,
   objective json NOT NULL,
   subjectTo json NOT NULL,
   bounds json DEFAULT NULL,
-  binaries varchar(50)[] DEFAULT NULL,
-  generals varchar(50)[] DEFAULT NULL,
+  binaries json DEFAULT NULL,
+  generals json DEFAULT NULL,
   options json DEFAULT NULL,
   versione INTEGER NOT NULL,
   cost NUMERIC,

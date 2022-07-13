@@ -44,4 +44,8 @@ router.get("/filterNumVars", auth.checkUser, auth.checkIsUser, async (req, res) 
   controller.filterByNumVars(req,res);
 })
 
+router.get("/filterModels", auth.checkUser, auth.checkIsUser, async (req, res) => {
+  controller.filterModels(req,res);
+})
+
 module.exports = router;

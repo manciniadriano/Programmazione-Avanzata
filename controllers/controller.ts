@@ -42,14 +42,12 @@ export class ModelController {
     delete modelnew.namemodel;
     modelnew.subjectTo = modelnew.subjectto;
     delete modelnew.subjectto;
-    Object.keys(modelnew).forEach((key) => {
-      if (modelnew[key] === null) {
-        delete modelnew[key];
+    let modelJSON = JSON.parse(JSON.stringify(modelnew, ["name", "objective", "subjecTto", "bounds", "binaries", "generals", "options"]));
+    Object.keys(modelJSON).forEach((key) => {
+      if (modelJSON[key] === null) {
+        delete modelJSON[key];
       }
     });
-    let modelnewstring: string = JSON.stringify(modelnew);
-
-    let modelJSON = JSON.parse(modelnewstring);
     return modelJSON;
   };
 
@@ -86,6 +84,9 @@ export class ModelController {
         let totalCost: number =
           (auth.costContraint(req.body) + auth.checkBinOrInt(req.body)) * 0.5;
         await model.insertReview(req.body, version + 1, totalCost);
+        let oldBudget: any = await user.getBudget(req.user.email);
+        let newBudget = oldBudget.budget - totalCost;
+        await user.budgetUpdate(newBudget, req.user.email);
         res.sendStatus(201);
       } else {
         res.sendStatus(404);
@@ -97,9 +98,19 @@ export class ModelController {
 
   public filterReviewByDate = async (req, res) => {
     try {
-      let models: any = await model.filterByDate(req.body.name, req.body.date);
-      let modelsF: any = models.map((item) => this.filtraJSON(item));
-      res.status(200).json(modelsF);
+
+      if (typeof (req.body.date) === "string" && typeof (req.body.name) === "string") {
+
+        let models: any = await model.filterByDate(req.body.name, req.body.date);
+
+        let modelsF: any = models.map((item) => this.filtraJSON(item));
+
+        res.status(200).json(modelsF);
+      }
+      else {
+        console.log('non stai dando dati corretti');
+        res.sendStatus(400);
+      }
     } catch (e) {
       res.sendStatus(404);
     }
@@ -113,18 +124,74 @@ export class ModelController {
    */
   public filterByNumVars = async (req, res) => {
     try {
-      let models: any = await model.getReviewOfModel(req.body.name);
-      let modelsF: any = models
-        .map((item) => this.filtraJSON(item))
-        .filter((item) => item.objective.vars.length == req.body.number);
-      console.log(models);
-      console.log(modelsF);
+      if (typeof (req.body.name) === "string" && typeof (req.body.number) === "number") {
+        let models: any = await model.getReviewOfModel(req.body.name);
+        let modelsF: any = models
+          .map((item) => this.filtraJSON(item))
+          .filter((item) => item.objective.vars.length === req.body.number);
 
-      res.send(modelsF);
+        res.send(modelsF);
+      }
+      else {
+        console.log('non stai dando dati corretti');
+        res.sendStatus(400);
+      }
     } catch (e) {
       res.sendStatus(404);
     }
   };
+  public filterModels = async (req, res) => {
+    try {
+      if (req.body.numvars) {
+        let models: any = await model.getModels();
+        let modelsF: any = models.map((item) => this.filtraJSON(item)).filter((item) => item.objective.vars.length === req.body.numvars);
+        res.send(modelsF);
+      }
+      else {
+        console.log('non ho dato un numvars');
+
+      }
+
+      if (req.body.numsub) {
+        let models: any = await model.getModels();
+        let modelsF: any = models.map((item) => this.filtraJSON(item)).filter((item) => item.subjectTo.length === req.body.numsub);
+        res.send(modelsF);
+      }
+      else {
+        console.log('non ho dato un numsub');
+
+      }
+
+      if (req.body.vartype) {
+        if (req.body.vartype === 1) {
+          let models: any = await model.getModels();
+          let modelsF: any = models.map((item) => this.filtraJSON(item)).filter((item) => item.generals.length === item.objective.vars.length);
+          res.send(modelsF);
+        }
+        if (req.body.vartype === 2) {
+          let models: any = await model.getModels();
+          let modelsF: any = models.map((item) => this.filtraJSON(item)).filter((item) => item.binaries.length === item.objective.vars.length);
+          res.send(modelsF);
+        }
+        if (req.body.vartype === 3) {
+          let models: any = await model.getModels();
+          let modelsF: any = models.map((item) => this.filtraJSON(item)).filter((item) => item.generals.length === 0).filter((item) => item.binaries.length === 0);
+          res.send(modelsF);
+        }
+      }
+      else {
+        console.log('non ho dato un numvars');
+
+      }
+
+
+    } catch (e) {
+      res.sendStatus(404);
+    }
+  }
+
+
+
 }
 
 export default ModelController;
