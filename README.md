@@ -25,3 +25,37 @@ In particolare realizzare un sistema che consenta la creazione e valutazione di 
 - Elencare le revisioni che sono state cancellate
 - Ripristinare una revisione che è stata cancellata
 - Effettuare una simulazione che consenta di variare (possono essere combinate):
+  - Coefficiente di una o più variabile/i nella funzione obiettivo specificando il valore di inizio, fine ed il passo di incremento;
+  - Coefficiente di una o più variabile/i nei vincoli specificando il valore di inizio, fine ed il passo di incremento;
+  - La richiesta di simulazione è soggetta a preventiva disponibilità di credito. 
+  - Es. variabile di vincolo in un range da 3.4 a 3.6 con passo 0.1 significa eseguire tre simulazioni con valore 3.4 3.5 e 3.6; il costo, dunque, è quello del modello per un fattore 3.
+  - Le richieste di simulazione devono essere validate (es. range non ammissibili).
+  - È necessario ritornare l’elenco di tutti i risultati; in base al criterio di ottimizzazione (si cerca il min o il max) ritornare anche il best result con la relativa configurazione dei coefficienti che sono stati usati.
+
+- Le richieste devono essere validate (es. utente che scelga un evento che non esistente).
+ 
+- Ogni utente autenticato (ovvero con JWT) ha un numero di token (valore iniziale impostato nel seed del database). 
+
+- Nel caso di token terminati ogni richiesta da parte dello stesso utente deve restituire 401 Unauthorized.
+
+- Prevedere una rotta per l’utente con ruolo admin che consenta di effettuare la ricarica per un utente fornendo la mail ed il nuovo “credito” (sempre mediante JWT). I token JWT devono contenere i dati essenziali.
+
+- Il numero residuo di token deve essere memorizzato nel db sopra citato.
+
+- Si deve prevedere degli script di seed per inizializzare il sistema. Nella fase di dimostrazione (demo) è necessario prevedere almeno 2 modelli diversi con almeno due revisioni.
+
+- Si chiede di utilizzare le funzionalità di middleware.
+
+- Si chiede di gestire eventuali errori mediante gli strati middleware sollevando le opportune eccezioni.
+
+- Si chiede di commentare opportunamente il codice. 
+
+- Si chiede di commentare opportunamente il codice.
+
+### Framework/Librerie
+
+- [Node.js](https://nodejs.org/it/)
+- [Express](https://expressjs.com/it/)
+- [Sequelize](https://sequelize.org/)
+- RDBMS ([Postgres](https://www.postgresql.org/))
+- [GLPK](https://github.com/jvail/glpk.js)
