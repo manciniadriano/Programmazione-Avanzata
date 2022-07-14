@@ -50,8 +50,6 @@ In particolare realizzare un sistema che consenta la creazione e valutazione di 
 
 - Si chiede di commentare opportunamente il codice. 
 
-- Si chiede di commentare opportunamente il codice.
-
 ### Framework/Librerie
 
 - [Node.js](https://nodejs.org/it/)
@@ -59,3 +57,11 @@ In particolare realizzare un sistema che consenta la creazione e valutazione di 
 - [Sequelize](https://sequelize.org/)
 - RDBMS ([Postgres](https://www.postgresql.org/))
 - [GLPK](https://github.com/jvail/glpk.js)
+
+## Progettazione
+### Diagrammi UML
+### Descrizione pattern utilizzati
+
+## Avvio di docker
+
+## Test
