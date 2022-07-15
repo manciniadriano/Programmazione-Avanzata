@@ -11,27 +11,41 @@ const checkVars = (objectField) => {
     if (item.name && typeof item.name === "string") {
       if (item.coef && typeof item.coef === "number") {
       } else {
-        console.log("Not valid coef variable");
         return false;
       }
     } else {
-      console.log("Not valid name variable");
       return false;
     }
   }
   return true;
 };
 
-const checkUbLp = (object) => {
-  if (
-    (object.ub || object.ub == 0) &&
-    typeof object.ub === "number" &&
-    (object.lb || object.lb == 0) &&
-    typeof object.lb === "number"
-  ) {
-    return true;
-  } else {
-    return false;
+const checkUbLb = (object) => {
+  let c: number = object.type;
+  switch (c) {
+    case 2: {
+      if (object.ub > object.lb || (object.up != 0 && object.up != null)) {
+        return false;
+      } else return true;
+    }
+    case 3: {
+      if (object.lb > object.ub || (object.lb != 0 && object.lb != null)) {
+        return false;
+      } else return true;
+    }
+    case 4: {
+      if (object.lb > object.ub) {
+        return false;
+      } else return true;
+    }
+    case 5: {
+      if (object.lb != object.ub) {
+        return false;
+      } else return true;
+    }
+    default: {
+      return false;
+    }
   }
 };
 
@@ -45,88 +59,18 @@ const searchVar = (item, body) => {
 };
 
 /*
- *  Summary: Verify that req is JSON
- *  Parameters: Body of request
- *  Return: Boolean indicating success or not
- */
-export const isJsonString = (obj: any) => {
-  if(obj) {
-    return true
-  } else {
-    return false
-  }
-};
-
-/*
  *  Summary: Verify that 'name' is well formatted
  *  Parameters: 'name' of req.body
  *  Return: Boolean indicating if is well formatted
  */
 export const checkName = (field: string) => {
-
   if (field && typeof field === "string") {
     return true;
   } else {
-    console.log("checkName");
     return false;
   }
 };
 
-/*
- *  Summary: Verify that 'bnds' is well formatted
- *  Parameters: Body of request
- *  Return: Boolean indicating if is well formatted
- */
-export const checkBnds = (object) => {
-  if (object) {
-    if (typeof object === "object") {
-      if (
-        object.type &&
-        Number.isInteger(object.type) &&
-        object.type > 0 &&
-        object.type < 6
-      ) {
-        if (typeof object.ub === "number" && typeof object.lb === "number") {
-          return true;
-        } else {
-          console.log("Ub or Lb not a number");
-          return false;
-        }
-      } else {
-        console.log("Wrong type");
-        return false;
-      }
-    } else {
-      console.log("Is not a object");
-      return false;
-    }
-  } else {
-    console.log("There isn't bnds");
-    return false;
-  }
-};
-
-/*
- *  Summary: Verify that 'subjectTo' is well formatted
- *  Parameters: Body of request
- *  Return: Boolean indicating if is well formatted
- */
-export const checkSubjectTo = (object: any) => {
-  for (const item of object) {
-    if (checkName(item.name) && checkVars(item.vars) && checkBnds(item.bnds)) {
-    } else {
-      console.log("subjectTo");
-      return false;
-    }
-  }
-  return true;
-};
-
-/*
- *  Summary: Verify that 'objective' is well formatted
- *  Parameters: Body of request
- *  Return: Boolean indicating if is well formatted
- */
 export const checkObjective = (object) => {
   if (
     checkName(object.name) &&
@@ -141,16 +85,43 @@ export const checkObjective = (object) => {
 };
 
 /*
+ *  Summary: Verify that 'subjectTo' is well formatted
+ *  Parameters: Body of request
+ *  Return: Boolean indicating if is well formatted
+ */
+export const checkSubjectTo = (object: any) => {
+  for (const item of object) {
+    if (checkName(item.name) && checkVars(item.vars) && checkUbLb(item.bnds)) {
+    } else {
+      console.log("subjectTo, hai sbagliato upper o lower");
+      return false;
+    }
+  }
+  return true;
+};
+
+/*
  *  Summary: Verify that 'bounds' is well formatted
  *  Parameters: Body of request
  *  Return: Boolean indicating if is well formatted
  */
 export const checkBounds = (object) => {
-  if (
-    checkName(object.name) &&
-    checkDirection(object.type) &&
-    checkUbLp(object)
-  ) {
+  if (object != undefined) {
+    for (const item of object) {
+      if (
+        typeof item.name === "string" &&
+        Number.isInteger(item.type) &&
+        typeof item.ub === "number" &&
+        item.lb === "number"
+      ) {
+        if (checkName(item.name) && checkUbLb(item)) {
+        } else {
+          return false;
+        }
+      } else {
+        return false;
+      }
+    }
     return true;
   } else {
     return false;
@@ -162,16 +133,18 @@ export const checkBounds = (object) => {
  *  Parameters: Body of request
  *  Return: Boolean indicating if is well formatted
  */
-export const checkBinaries = (binaries, vars) => {
-  if (binaries && binaries.lenght) {
-    for (const item of binaries) {
-      if (typeof item === "string" && searchVar(item, vars)) {
-      } else {
-        return false;
-      }
-    }
-  } else {
-    return false;
+/*export const checkBinaries = (binaries, vars) => {
+  for(const item in binaries) {
+    notInGenerals()
   }
-  return true;
 };
+
+const notInGenerals = (binaries: string, generals: Array<string>): boolean => {
+  let array: Array<string> = generals.filter((item) => item == binaries);
+  if (array.length > 0) {
+    return false;
+  } else {
+    return true;
+  }
+}
+*/

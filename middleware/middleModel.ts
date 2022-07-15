@@ -1,5 +1,5 @@
 import * as mf from "./helpFunction/middleModFun";
-
+import { LP } from "glpk.js";
 
 export async function newModelValidation(req: any, res: any, next: any) {
   try {
@@ -11,14 +11,12 @@ export async function newModelValidation(req: any, res: any, next: any) {
       res.sendStatus(400); //Bad Request
     }
   } catch (error) {
-    console.log("errore");
     res.sendStatus(403);
   }
 }
 
 const validationModel = (body: any): boolean => {
   if (
-    mf.isJsonString(body) &&
     mf.checkName(body.name) &&
     mf.checkObjective(body.objective) &&
     mf.checkSubjectTo(body.subjectTo)
@@ -28,4 +26,3 @@ const validationModel = (body: any): boolean => {
     return false;
   }
 };
-

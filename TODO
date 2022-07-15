@@ -1,6 +1,2 @@
-separare controller, MODEL, REVIEW, SOLVE (singleton?)
-middleware inglobare modelValidatior.ts in middleModel
-completare i controlli su createModel
-modello RESULT(? necessario)
-spostare checkAdmin in middleAdmin
-gestire eccezioni se i campi inseriti sono corretti a livello di chiave
+completare i controlli su createModel(?)
+checkbounds in teoria è fatto ma bisogna vedere cosa non va

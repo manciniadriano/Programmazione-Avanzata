@@ -179,6 +179,17 @@ export async function getModels() {
   return models;
 }
 
+export async function getSpecificModel(name: string, version: number) {
+  const model = await ModelOpt.findOne({
+    where: {
+      namemodel: name,
+      version: { [Op.eq]: version },
+      valid: { [Op.eq]: true },
+    },
+  });
+  return model;
+}
+
 export async function deleteModel(name: string, version: number) {
   const models = await ModelOpt.update(
     { valid: false },

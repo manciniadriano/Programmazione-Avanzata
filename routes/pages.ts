@@ -4,12 +4,14 @@ import * as solve from "../middleware/middleSolve";
 import * as admin from "../middleware/middleAdmin";
 import ModelController from "../controllers/controllerModel";
 import { ReviewController } from "../controllers/controllerReview";
+import { SimulationController } from "../controllers/controllerSimulation";
 
 const express = require("express");
 const router = express.Router();
 
 let cntrModel = new ModelController();
 let cntrReview = new ReviewController();
+let cntrSimulation = new SimulationController
 router.use(express.json());
 
 router.use((err, req, res, next) => {
@@ -80,6 +82,10 @@ router.post("/restoreReview", auth.checkUser, async (req, res) => {
   cntrReview.restoreReview(req, res);
 });
 
+router.get("/getSimulation", auth.checkUser, async (req,res) => {
+  cntrSimulation.doSimulation(req,res);
+})
+
 router.get("*", async (req, res) => {
   res.sendStatus(404);
 });
@@ -87,5 +93,7 @@ router.get("*", async (req, res) => {
 router.post("*", async (req, res) => {
   res.sendStatus(404);
 });
+
+
 
 module.exports = router;
