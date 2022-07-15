@@ -46,7 +46,7 @@ const ModelOpt = sequelize.define(
         //},
       },
     },
-    versione: {
+    version: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
@@ -96,7 +96,7 @@ export async function insertModel(object: any, cost: number) {
       binaries: object.binaries,
       generals: object.generals,
       options: options,
-      versione: 1,
+      version: 1,
       cost: cost,
       creation_date: date,
     });
@@ -109,14 +109,14 @@ export async function insertModel(object: any, cost: number) {
 export async function checkExistingModel(name: string, version?: number) {
   if (version) {
     var model = await ModelOpt.findOne({
-      where: { namemodel: `${name}`, versione: version },
+      where: { namemodel: `${name}`, version: version },
     });
   } else {
-    const lastVersion: number = await ModelOpt.max("versione", {
+    const lastVersion: number = await ModelOpt.max("version", {
       where: { namemodel: name },
     });
     var model = await ModelOpt.findOne({
-      where: { namemodel: name, versione: lastVersion },
+      where: { namemodel: name, version: lastVersion },
     });
   }
   return model;
@@ -142,14 +142,14 @@ export async function insertReview(object: any, version: number, cost: number) {
     binaries: object.binaries,
     generals: object.generals,
     options: options,
-    versione: version,
+    version: version,
     cost: cost,
     creation_date: date,
   });
   return model;
 }
 
-export async function filterByDate(name: string, date: string) {
+/*export async function filterByDate(name: string, date: string) {
   const models = await ModelOpt.findAll({
     where: {
       namemodel: name,
@@ -159,13 +159,13 @@ export async function filterByDate(name: string, date: string) {
     },
   });
   return models;
-}
+}*/
 
 export async function getReviewOfModel(name: string) {
   const models = await ModelOpt.findAll({
     where: {
       namemodel: name,
-      versione: { [Op.gt]: 1 },
+      version: { [Op.gt]: 1 },
       valid: { [Op.eq]: true },
     },
   });
@@ -174,7 +174,7 @@ export async function getReviewOfModel(name: string) {
 
 export async function getModels() {
   const models = await ModelOpt.findAll({
-    where: { versione: { [Op.eq]: 1 } },
+    where: { version: { [Op.eq]: 1 } },
   });
   return models;
 }
@@ -182,7 +182,7 @@ export async function getModels() {
 export async function deleteModel(name: string, version: number) {
   const models = await ModelOpt.update(
     { valid: false },
-    { where: { namemodel: name, versione: version, valid: { [Op.eq]: true } } }
+    { where: { namemodel: name, version: version, valid: { [Op.eq]: true } } }
   );
   return models;
 }
@@ -197,7 +197,7 @@ export async function getDeletedReview() {
 export async function restoreReview(name: string, version: number) {
   const models = await ModelOpt.update(
     { valid: true },
-    { where: { namemodel: name, versione: version, valid: { [Op.eq]: false } } }
+    { where: { namemodel: name, version: version, valid: { [Op.eq]: false } } }
   );
   return models;
 }

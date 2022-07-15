@@ -15,7 +15,7 @@ CREATE TABLE models(
   binaries json DEFAULT NULL,
   generals json DEFAULT NULL,
   options json DEFAULT NULL,
-  versione INTEGER NOT NULL,
+  version INTEGER NOT NULL,
   cost NUMERIC,
   creation_date varchar(50) NOT NULL,
   valid boolean

@@ -21,8 +21,6 @@ router.use((err, req, res, next) => {
 
 router.use([auth.checkHeader, auth.checkToken, auth.verifyAndAuthenticate]);
 
-
-
 router.post(
   "/newModel",
   auth.checkUser,
@@ -62,12 +60,8 @@ router.post(
   }
 );
 
-router.get("/filterReviewDate", auth.checkUser, async (req, res) => {
-  cntrReview.filterReviewByDate(req, res);
-});
-
-router.get("/filterNumVars", auth.checkUser, async (req, res) => {
-  cntrReview.filterByNumVars(req, res);
+router.get("/filterReviews", auth.checkUser, async (req, res) => {
+  cntrReview.filterReview(req, res);
 });
 
 router.get("/filterModels", auth.checkUser, async (req, res) => {

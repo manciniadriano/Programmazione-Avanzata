@@ -32,7 +32,7 @@ export class ModelController {
 
     delete modelnew["id"];
     delete modelnew["cost"];
-    delete modelnew["versione"];
+    delete modelnew["version"];
     delete modelnew["creation_date"];
     delete modelnew["options"];
     delete modelnew["valid"];
@@ -76,75 +76,6 @@ export class ModelController {
     }
   };
 
-  public newReview = async (req, res) => {
-    try {
-      let modelCheck: any = await model.checkExistingModel(req.body.name);
-      if (modelCheck) {
-        let version = modelCheck.versione;
-        let totalCost: number =
-          (auth.costContraint(req.body) + auth.checkBinOrInt(req.body)) * 0.5;
-        await model.insertReview(req.body, version + 1, totalCost);
-        let oldBudget: any = await user.getBudget(req.user.email);
-        let newBudget = oldBudget.budget - totalCost;
-        await user.budgetUpdate(newBudget, req.user.email);
-        res.sendStatus(201);
-      } else {
-        res.sendStatus(404);
-      }
-    } catch (e) {
-      res.sendStatus(404);
-    }
-  };
-
-  public filterReviewByDate = async (req, res) => {
-    try {
-      if (
-        typeof req.body.date === "string" &&
-        typeof req.body.name === "string"
-      ) {
-        let models: any = await model.filterByDate(
-          req.body.name,
-          req.body.date
-        );
-
-        let modelsF: any = models.map((item) => this.filtraJSON(item));
-
-        res.status(200).json(modelsF);
-      } else {
-        console.log("non stai dando dati corretti");
-        res.sendStatus(400);
-      }
-    } catch (e) {
-      res.sendStatus(404);
-    }
-  };
-
-  /**
-   * struttura json esempio: {"name": "namemodel", "number":3} number sarebbe il numero di variabili
-   * @param req
-   * @param res
-   */
-  public filterByNumVars = async (req, res) => {
-    try {
-      if (
-        typeof req.body.name === "string" &&
-        typeof req.body.number === "number"
-      ) {
-        let models: any = await model.getReviewOfModel(req.body.name);
-        let modelsF: any = models
-          .map((item) => this.filtraJSON(item))
-          .filter((item) => item.objective.vars.length === req.body.number);
-
-        res.send(modelsF);
-      } else {
-        console.log("non stai dando dati corretti");
-        res.sendStatus(400);
-      }
-    } catch (e) {
-      res.sendStatus(404);
-    }
-  };
-
   public filterPlus = async (req, res) => {
     try {
       let models: any = await model.getModels();
@@ -161,59 +92,51 @@ export class ModelController {
           } else return true;
         })
         .filter((item) => {
-          if (req.body.vartype === 1) {
+          let numGen: number = 0;
+          let numBin: number = 0;
+          if (item.generals) {
+            numGen = item.generals.length;
+          }
+          if (item.binaries) {
+            numBin = item.binaries.length;
+          }
+          let notContinuous = numGen + numBin;
+          let totalVars = item.objective.vars.length;
+          if (req.body.countinous == 1) {
+            if (totalVars - notContinuous > 0) {
+              return true;
+            } else {
+              return false;
+            }
+          } else {
+            if (totalVars - notContinuous > 0) {
+              return false;
+            } else {
+              return true;
+            }
+          } 
+        })
+        .filter((item) => {
+          if (req.body.generals === 1) {
             if (!(item.generals === undefined)) {
-              return item.generals.length === item.objective.vars.length;
+              return true;
             } else return false;
-          } else return true;
+          } else {
+            return item.generals === undefined;
+          }
         })
         .filter((item) => {
-          if (req.body.vartype === 2) {
+          if (req.body.binaries === 1) {
             if (!(item.binaries === undefined)) {
-              return item.binaries.length === item.objective.vars.length;
+              return true;
             } else return false;
-          } else return true;
-        })
-        .filter((item) => {
-          if (req.body.vartype === 3) {
-            return item.generals === undefined && item.binaries === undefined;
-          } else return true;
+          } else {
+            return item.binaries === undefined;
+          }
         });
       res.send(modelsF);
     } catch (e) {
       res.sendStatus(400);
-    }
-  };
-
-  public deleteReview = async (req, res) => {
-    try {
-      if (req.body.version > 1) {
-        await model.deleteModel(req.body.name, req.body.version);
-        res.sendStatus(200);
-      } else res.sendStatus(400);
-    } catch (e) {
-      res.sendStatus(404);
-    }
-  };
-
-  public getDeletedReview = async (req, res) => {
-    try {
-      let models: any = await model.getDeletedReview();
-      let modelsF: any = models.map((item) => this.filtraJSON(item));
-      res.send(modelsF);
-    } catch {
-      res.sendStatus(404);
-    }
-  };
-
-  public restoreReview = async (req, res) => {
-    try {
-      if (req.body.version > 1) {
-        await model.restoreReview(req.body.name, req.body.version);
-        res.sendStatus(200);
-      } else res.sendStatus(400);
-    } catch (e) {
-      res.sendStatus(404);
     }
   };
 }
