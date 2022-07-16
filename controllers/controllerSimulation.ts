@@ -9,19 +9,23 @@ export class SimulationController {
   public doSimulation = async (req, res) => {
     try {
       let solve: Array<JSON> = [];
-      let counter: number= 1;
+      let objectiveVars = combinationFunctionObjective(req.body.objective);
+      let subjectToComb = combinationFunctionSubjectTo(req.body.subjectTo);
       let model: any = await getSpecificModel(req.body.name, req.body.version);
-      for (const item of model.objective.vars) {
-        for (const objective of req.body.objective) {
-          if (item.name == objective.name) {
-            item["coef"] = objective.start*counter;
+      model = this.filtraJSON(model);
+      for (const elem of objectiveVars) {
+        for (const raw of elem) {
+          for (const item of model.objective.vars) {
+            if (item.name == raw.name) {
+              item["coef"] = raw.value;
+            }
           }
         }
+        model.objective.vars.forEach((item) => console.log(item));
+        let solution = glpk.solve(model);
+        solve.push(solution);
       }
-      model = this.filtraJSON(model);
-      let solution = glpk.solve(model);
-      solve.push(solution);
-      res.send(solution);
+      res.send(solve);
     } catch {
       res.sendStatus(404);
     }
@@ -53,3 +57,47 @@ export class SimulationController {
   };
 }
 
+const combinationFunctionObjective = (objective: any) => {
+  var array = [];
+
+  objective.map((elem) => {
+    let appoggio = [];
+    let i = Math.round((elem.end - elem.start) / elem.step); // numero di step
+    for (var n = 0; n <= i; n++) {
+      var object = { name: elem.name, value: elem.start + elem.step * n };
+      appoggio.push(object);
+    }
+    array.push(appoggio);
+  });
+  const cartesian = (...f) =>
+    f
+      .map((a) =>
+        a.reduce((a, b) => a.flatMap((d) => b.map((e) => [d, e].flat())))
+      )
+      .flat();
+
+  let output = cartesian(array);
+  return output;
+};
+
+const combinationFunctionObjective = (objective: any) => {
+  var array = [];
+  objective.map((elem) => {
+    let appoggio = [];
+    let i = Math.round((elem.end - elem.start) / elem.step); // numero di step
+    for (var n = 0; n <= i; n++) {
+      var object = { name: elem.name, value: elem.start + elem.step * n };
+      appoggio.push(object);
+    }
+    array.push(appoggio);
+  });
+  const cartesian = (...f) =>
+    f
+      .map((a) =>
+        a.reduce((a, b) => a.flatMap((d) => b.map((e) => [d, e].flat())))
+      )
+      .flat();
+
+  let output = cartesian(array);
+  return output;
+};

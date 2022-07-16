@@ -12,7 +12,7 @@ const router = express.Router();
 
 let cntrModel = new ModelController();
 let cntrReview = new ReviewController();
-let cntrSimulation = new SimulationController
+let cntrSimulation = new SimulationController();
 router.use(express.json());
 
 router.use((err, req, res, next) => {
