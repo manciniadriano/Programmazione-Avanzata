@@ -75,10 +75,8 @@ export class ReviewController {
 
   public deleteReview = async (req, res) => {
     try {
-      if (req.body.version > 1) {
         await model.deleteModel(req.body.name, req.body.version);
         res.sendStatus(200);
-      } else res.sendStatus(400);
     } catch (e) {
       res.sendStatus(404);
     }
@@ -96,10 +94,8 @@ export class ReviewController {
 
   public restoreReview = async (req, res) => {
     try {
-      if (req.body.version > 1) {
         await model.restoreReview(req.body.name, req.body.version);
         res.sendStatus(200);
-      } else res.sendStatus(400);
     } catch (e) {
       res.sendStatus(404);
     }

@@ -13,11 +13,7 @@ const User = sequelize.define(
     budget: {
       type: DataTypes.FLOAT,
       allowNull: false,
-    },
-    ruolo: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-    },
+    }
   },
   {
     modelName: "users",
@@ -35,7 +31,7 @@ export async function getBudget(email: string) {
 
 export async function checkExistingUser(email: string) {
   const user = await User.findOne({
-    attributes: ['email', 'ruolo'],
+    attributes: ['email'],
     where: { email: email },
   });
   return user;

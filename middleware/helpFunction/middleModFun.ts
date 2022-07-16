@@ -87,8 +87,12 @@ const checkUbLb = (object): boolean => {
  * @returns true o false se scritto in modo corretto o meno
  */
 export const checkName = (name: string): boolean => {
-  if (name && typeof name === "string") {
-    return true;
+  if (name != undefined) {
+    if (name && typeof name === "string") {
+      return true;
+    } else {
+      return false;
+    }
   } else {
     return false;
   }
@@ -100,12 +104,16 @@ export const checkName = (name: string): boolean => {
  * @returns true o false a seconda se scritto in modo corretto o meno
  */
 export const checkObjective = (objective: any): boolean => {
-  if (
-    checkName(objective.name) &&
-    checkDirection(objective.direction) &&
-    checkVars(objective.vars)
-  ) {
-    return true;
+  if (objective != undefined) {
+    if (
+      checkName(objective.name) &&
+      checkDirection(objective.direction) &&
+      checkVars(objective.vars)
+    ) {
+      return true;
+    } else {
+      return false;
+    }
   } else {
     return false;
   }
@@ -117,13 +125,21 @@ export const checkObjective = (objective: any): boolean => {
  * @returns true o false a seconda se scritto correttamente
  */
 export const checkSubjectTo = (subjectTo: any): boolean => {
-  for (const item of subjectTo) {
-    if (checkName(item.name) && checkVars(item.vars) && checkUbLb(item.bnds)) {
-    } else {
-      return false;
+  if (subjectTo != undefined) {
+    for (const item of subjectTo) {
+      if (
+        checkName(item.name) &&
+        checkVars(item.vars) &&
+        checkUbLb(item.bnds)
+      ) {
+      } else {
+        return false;
+      }
     }
+    return true;
+  } else {
+    return false;
   }
-  return true;
 };
 
 /**
@@ -184,16 +200,20 @@ export const checkBinGenOverlap = (
   binaries: Array<String>,
   generals: Array<String>
 ): boolean => {
-  let check: boolean[] = binaries.map((item) => {
-    if (generals.includes(item)) {
+  if (binaries != undefined && generals != undefined) {
+    let check: boolean[] = binaries.map((item) => {
+      if (generals.includes(item)) {
+        return false;
+      } else {
+        return true;
+      }
+    });
+    console.log(check);
+    if (check.includes(false)) {
       return false;
     } else {
       return true;
     }
-  });
-  console.log(check);
-  if (check.includes(false)) {
-    return false;
   } else {
     return true;
   }

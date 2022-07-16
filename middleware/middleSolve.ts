@@ -9,7 +9,7 @@ import * as User from "../model/User";
 */
 
 /**
- * Funzione per controllare la richiesta per la solve sia corretta, sia per i tipi sia per l'esistenza del modello nel db
+ * Funzione per validare la richiesta per la solve sia corretta, sia per i tipi sia per l'esistenza del modello nel db
  * @param req richiesta
  * @param res risposta
  * @param next 
@@ -44,7 +44,6 @@ export async function checkCreditoSolve(req, res, next) {
     req.body.name,
     req.body.version
   );
-  console.log(cost.cost);
   if (budget.budget > cost.cost) {
     next();
   } else {

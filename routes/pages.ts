@@ -2,6 +2,7 @@ import * as mNM from "../middleware/middleModel";
 import * as auth from "../middleware/middleAuth";
 import * as solve from "../middleware/middleSolve";
 import * as admin from "../middleware/middleAdmin";
+import * as review from "../middleware/middleReview";
 import ModelController from "../controllers/controllerModel";
 import { ReviewController } from "../controllers/controllerReview";
 import { SimulationController } from "../controllers/controllerSimulation";
@@ -62,15 +63,15 @@ router.post(
   }
 );
 
-router.get("/filterReviews", auth.checkUser, async (req, res) => {
+router.get("/filterReviews", auth.checkUser, review.middleFilterReview, async (req, res) => {
   cntrReview.filterReview(req, res);
 });
 
-router.get("/filterModels", auth.checkUser, async (req, res) => {
+router.get("/filterModels", auth.checkUser, mNM.filterModels, async (req, res) => {
   cntrModel.filterPlus(req, res);
 });
 
-router.post("/deleteReview", auth.checkUser, async (req, res) => {
+router.post("/deleteReview", auth.checkUser, review.middleDeleteReview, async (req, res) => {
   cntrReview.deleteReview(req, res);
 });
 
@@ -78,7 +79,7 @@ router.get("/getDeletedReview", auth.checkUser, async (req, res) => {
   cntrReview.getDeletedReview(req, res);
 });
 
-router.post("/restoreReview", auth.checkUser, async (req, res) => {
+router.post("/restoreReview", auth.checkUser, review.middleRestoreReview, async (req, res) => {
   cntrReview.restoreReview(req, res);
 });
 

@@ -2,8 +2,7 @@ CREATE DATABASE prga;
 \c prga
 CREATE TABLE users(
   email varchar(50) NOT NULL,
-  budget REAL NOT NULL,
-  ruolo INT NOT NULL
+  budget REAL NOT NULL
 );
 
 CREATE TABLE models(
@@ -21,6 +20,6 @@ CREATE TABLE models(
   valid boolean
 );
 
-INSERT INTO users(email, budget, ruolo) VALUES
-('user@user.com', 5, 1),
-('admin@admin.com', 100, 2);
+INSERT INTO users(email, budget) VALUES
+('user@user.com', 5),
+('nicola@nicola.com', 100);

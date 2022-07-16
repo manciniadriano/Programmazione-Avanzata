@@ -67,11 +67,22 @@ export class ModelController {
     }
   };
 
+  /**
+   * Ricarica nel db del credito dello user
+   * @param req request
+   * @param res response
+   */
   public creditCharge = async (req, res) => {
-    if (req.user.budget > 0) {
-      user.budgetUpdate(req.user.budget, req.user.emailuser);
-      res.sendStatus(200);
-    } else {
+    try {
+      if (Number(req.user.budget) > 0) {
+        let oldBudget: any = await user.getBudget(req.user.emailuser);
+        let newBudget = oldBudget.budget + Number(req.user.budget);
+        user.budgetUpdate(newBudget, req.user.emailuser);
+        res.sendStatus(200);
+      } else {
+        res.sendStatus(400);
+      }
+    } catch {
       res.sendStatus(400);
     }
   };
@@ -114,7 +125,7 @@ export class ModelController {
             } else {
               return true;
             }
-          } 
+          }
         })
         .filter((item) => {
           if (req.body.generals === 1) {

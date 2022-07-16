@@ -2,6 +2,15 @@ import * as jwt from "jsonwebtoken";
 import * as sql from "sequelize";
 import { SingletonDB } from "../model/Database";
 import * as User from "../model/User";
+
+/**
+ * jwt per lo user 
+ * {
+ *  "email":"user@user.com",
+ *  "role":"1"
+ * }
+ */
+
 export var checkHeader = function (req, res, next) {
   const authHeader = req.headers.authorization;
   if (authHeader) {
@@ -37,8 +46,7 @@ export function verifyAndAuthenticate(req, res, next) {
 }
 
 export async function checkUser(req, res, next) {
-  const user: any = await User.checkExistingUser(req.user.email);
-  if (user.email === req.user.email && user.ruolo === 1) {
+  if (req.user.email && req.user.role === "1") {
     next();
   } else {
     res.sendStatus(401);
