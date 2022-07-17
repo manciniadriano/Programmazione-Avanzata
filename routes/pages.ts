@@ -16,10 +16,15 @@ let cntrSimulation = new SimulationController();
 router.use(express.json());
 
 router.use((err, req, res, next) => {
-  if (err instanceof SyntaxError && "body" in err) {
+  try {
+    if (err instanceof SyntaxError && "body" in err) {
+      throw "JSON not valid";
+    }
+    next();
+  } catch (e){
+    console.log(e);
     res.sendStatus(400);
   }
-  next();
 });
 
 router.use([auth.checkHeader, auth.checkToken, auth.verifyAndAuthenticate]);
@@ -63,29 +68,54 @@ router.post(
   }
 );
 
-router.get("/filterReviews", auth.checkUser, review.middleFilterReview, async (req, res) => {
-  cntrReview.filterReview(req, res);
-});
+router.get(
+  "/filterReviews",
+  auth.checkUser,
+  review.middleFilterReview,
+  async (req, res) => {
+    cntrReview.filterReview(req, res);
+  }
+);
 
-router.get("/filterModels", auth.checkUser, mNM.filterModels, async (req, res) => {
-  cntrModel.filterPlus(req, res);
-});
+router.get(
+  "/filterModels",
+  auth.checkUser,
+  mNM.filterModels,
+  async (req, res) => {
+    cntrModel.filterPlus(req, res);
+  }
+);
 
-router.post("/deleteReview", auth.checkUser, review.middleDeleteReview, async (req, res) => {
-  cntrReview.deleteReview(req, res);
-});
+router.post(
+  "/deleteReview",
+  auth.checkUser,
+  review.middleDeleteReview,
+  async (req, res) => {
+    cntrReview.deleteReview(req, res);
+  }
+);
 
 router.get("/getDeletedReview", auth.checkUser, async (req, res) => {
   cntrReview.getDeletedReview(req, res);
 });
 
-router.post("/restoreReview", auth.checkUser, review.middleRestoreReview, async (req, res) => {
-  cntrReview.restoreReview(req, res);
-});
+router.post(
+  "/restoreReview",
+  auth.checkUser,
+  review.middleRestoreReview,
+  async (req, res) => {
+    cntrReview.restoreReview(req, res);
+  }
+);
 
-router.get("/getSimulation", auth.checkUser, async (req,res) => {
-  cntrSimulation.doSimulation(req,res);
-})
+router.get(
+  "/getSimulation",
+  auth.checkUser,
+  solve.checkDoSimulation,
+  async (req, res) => {
+    cntrSimulation.doSimulation(req, res);
+  }
+);
 
 router.get("*", async (req, res) => {
   res.sendStatus(404);
@@ -94,7 +124,5 @@ router.get("*", async (req, res) => {
 router.post("*", async (req, res) => {
   res.sendStatus(404);
 });
-
-
 
 module.exports = router;

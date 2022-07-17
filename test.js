@@ -1,6 +1,14 @@
+var objective = 
+    [
+        {
+            "name": "x1",
+            "start": 0.7,
+            "end": 0.8,
+            "step": 0.1
+        }
+    ]
 
-
-var objective = [
+var subject = [
     {
         "name": "c1",
         "vars": [
@@ -16,7 +24,7 @@ var objective = [
         "name": "c2",
         "vars": [
             {
-                "name": "x2",
+                "name": "x1",
                 "start": 4.3,
                 "end": 4.4,
                 "step": 0.1
@@ -26,26 +34,42 @@ var objective = [
 ]
 
 var array = [];
-objective.map((elem) => {
-    elem.vars.map((item) => {
+subject.map((elem) => {
+    elem.vars.forEach((item) => {
         let appoggio = [];
         let i = Math.round((item.end - item.start) / item.step);
         for (var n = 0; n <= i; n++) {
-            var object = { name: item.name, value: item.start + item.step * n };
+            var object = { namesubject: elem.name, name: item.name, value: item.start + item.step * n };
             appoggio.push(object);
         }
         array.push(appoggio);
     })
-});
-console.log(array);
+})
 
+var array1 = [];
+
+objective.map((elem) => {
+    let appoggio = [];
+    let i = Math.round((elem.end - elem.start) / elem.step); // numero di step
+    for (var n = 0; n <= i; n++) {
+        var object = { name: elem.name, value: elem.start + elem.step * n };
+        appoggio.push(object);
+    }
+    array1.push(appoggio);
+});
 
 const cartesian = (...f) =>
     f
         .map((a) =>
             a.reduce((a, b) => a.flatMap((d) => b.map((e) => [d, e].flat())))
-        )
-        .flat();
+        );
 
-let output = cartesian(array);
+let output = cartesian(array, array1);
 console.log(output);
+let final = cartesian(output, array1);
+//console.log(final);
+//console.log(final[0].length);
+//let final = cartesian(output[0], output[1]);
+//let final = cartesian(output, array1)
+//console.log(final[0])
+

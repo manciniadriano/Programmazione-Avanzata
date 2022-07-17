@@ -15,23 +15,27 @@
  * @param next
  */
 export const middleFilterReview = (req: any, res: any, next: any) => {
-  if (req.body.name != undefined && typeof req.body.name === "string") {
-    if (
-      req.body.date == undefined ||
-      (req.body.date != undefined && typeof req.body.date === "string")
-    ) {
+  try {
+    if (req.body.name != undefined && typeof req.body.name === "string") {
+      if (
+        req.body.date == undefined ||
+        (req.body.date != undefined && typeof req.body.date === "string")
+      ) {
+      } else {
+        throw "Bad Request";
+      }
+      if (
+        req.body.numvars == undefined ||
+        (req.body.numvars != undefined && typeof req.body.numvars === "number")
+      ) {
+      } else {
+        throw "Bad Request";
+      }
     } else {
-      res.sendStatus(400);
-    }
-    if (
-      req.body.numvars == undefined ||
-      (req.body.numvars != undefined && typeof req.body.numvars === "number")
-    ) {
-    } else {
-      res.sendStatus(400);
+      throw "Bad Request"
     }
     next();
-  } else {
+  } catch {
     res.sendStatus(400);
   }
 };
@@ -74,18 +78,18 @@ export const middleDeleteReview = (req: any, res: any, next: any) => {
  * Middleware per verificare che la richiesta di restore di una revisione sia valida
  * @param req request
  * @param res response
- * @param next 
+ * @param next
  */
 export const middleRestoreReview = (req: any, res: any, next: any) => {
-    if (
-      req.body.name &&
-      typeof req.body.name === "string" &&
-      req.body.version &&
-      Number.isInteger(req.body.version) &&
-      req.body.version > 1
-    ) {
-      next();
-    } else {
-      res.sendStatus(400);
-    }
-  };
+  if (
+    req.body.name &&
+    typeof req.body.name === "string" &&
+    req.body.version &&
+    Number.isInteger(req.body.version) &&
+    req.body.version > 1
+  ) {
+    next();
+  } else {
+    res.sendStatus(400);
+  }
+};
