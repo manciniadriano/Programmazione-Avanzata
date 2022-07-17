@@ -191,11 +191,10 @@ export async function getSpecificModel(name: string, version: number) {
 }
 
 export async function deleteModel(name: string, version: number) {
-  const models = await ModelOpt.update(
+  await ModelOpt.update(
     { valid: false },
     { where: { namemodel: name, version: version, valid: { [Op.eq]: true } } }
   );
-  return models;
 }
 
 export async function getDeletedReview() {

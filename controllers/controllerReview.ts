@@ -75,8 +75,13 @@ export class ReviewController {
 
   public deleteReview = async (req, res) => {
     try {
-        await model.deleteModel(req.body.name, req.body.version);
+      if (await model.getSpecificModel(req.body.name, req.body.version)) {
+        await model.deleteModel(req.body.name, req.body.version)
         res.sendStatus(200);
+      }
+      else {
+        throw "Not Found";
+      }
     } catch (e) {
       res.sendStatus(404);
     }
@@ -94,8 +99,13 @@ export class ReviewController {
 
   public restoreReview = async (req, res) => {
     try {
-        await model.restoreReview(req.body.name, req.body.version);
+      if (await model.getSpecificModel(req.body.name, req.body.version)) {
+        await model.restoreReview(req.body.name, req.body.version)
         res.sendStatus(200);
+      }
+      else {
+        throw "Not Found";
+      }
     } catch (e) {
       res.sendStatus(404);
     }
