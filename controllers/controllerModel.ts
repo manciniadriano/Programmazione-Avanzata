@@ -128,6 +128,60 @@ export class ModelController {
       res.sendStatus(400);
     }
   };
-}
 
+public filterPlus1 = async (req, res) => {
+  
+  try {
+    let models: any = await model.getModels();
+    let modelsF: any = models
+      .map((item) => filtraJSON(item))
+      .filter((item) => {
+        if (req.body.numvars) {
+          return item.objective.vars.length === req.body.numvars;
+        } else return true;
+      })
+      .filter((item) => {
+        if (req.body.numsub) {
+          return item.subjectTo.length === req.body.numsub;
+        } else return true;
+      })
+      .filter((item) => {
+        if(req.body.binaries !== undefined){
+          if(req.body.binaries===0){
+            return item.binaries === undefined
+          } else return item.binaries !== undefined
+        } else return true;
+      })
+      .filter((item) => {
+        if(req.body.generals !== undefined){
+          if(req.body.generals===0){
+            return item.generals === undefined
+          } else return item.generals !== undefined
+        } else return true;
+      })
+      .filter((item)=>{
+        if(req.body.continuous !== undefined){
+          if(req.body.continuous===0){
+            if((item.binaries === undefined) && (item.generals === undefined)) return false;
+            if((item.binaries === undefined) && (item.generals !== undefined)) return item.generals.length === item.objective.vars.length;
+            if((item.binaries !== undefined) && (item.generals === undefined)) return item.binaries.length === item.objective.vars.length;
+            if((item.binaries !== undefined) && (item.generals !== undefined)) return (item.binaries.length+item.generals.length) === item.objective.length;
+          } else {
+            if((item.binaries === undefined) && (item.generals === undefined)) return true;
+            if((item.binaries === undefined) && (item.generals !== undefined)) return item.generals.length < item.objective.vars.length;
+            if((item.binaries !== undefined) && (item.generals === undefined)) return item.binaries.length < item.objective.vars.length;
+            if((item.binaries !== undefined) && (item.generals !== undefined)) return (item.binaries.length+item.generals.length) < item.objective.length;
+          }
+        } else return true;
+        }
+      );
+      res.send(modelsF);
+    }
+    catch(e){
+      res.send(404);
+    }
+};
+
+
+}
 export default ModelController;

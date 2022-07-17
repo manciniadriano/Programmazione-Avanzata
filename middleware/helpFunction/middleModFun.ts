@@ -243,3 +243,22 @@ export const filtraJSON = (json: any) => {
 
   return modelFiltered;
 };
+
+
+export const checkNum = (numvars: any): boolean => {
+  if (numvars != undefined) {
+    if (numvars && typeof numvars === "number") {
+      return numvars > 0
+    }
+    else return false;
+  } else return true;
+};
+
+export const check3Filter = (filter: any): boolean => {
+  if (filter != undefined) {
+    if (typeof filter === "number") {
+      return (filter === 0 || filter === 1)
+    }
+    else return false;
+  } else return true;
+};

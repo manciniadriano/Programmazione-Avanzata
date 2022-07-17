@@ -78,3 +78,33 @@ export const filterModels = (req: any, res: any, next: any) => {
     res.sendStatus(400);
   }
 };
+
+
+export async function newFilterValidation(req: any, res: any, next: any) {
+  try {
+    let response = await filterModelsMIO(req.body);
+    if (response) {
+      next();
+    } else {
+      res.sendStatus(400); //Bad Request
+    }
+  } catch (error) {
+    res.sendStatus(403);
+  }
+}
+
+
+export const filterModelsMIO = (req: any): boolean => {
+  if (
+    mf.checkNum(req.numvars) &&
+    mf.checkNum(req.numsub) &&
+    mf.check3Filter(req.continuous) &&
+    mf.check3Filter(req.binaries) &&
+    mf.check3Filter(req.generals)
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+
+}
