@@ -15,6 +15,8 @@ let cntrReview = new ReviewController();
 let cntrSimulation = new SimulationController();
 router.use(express.json());
 
+
+//middleware per verificare che le richieste siano un json
 router.use((err, req, res, next) => {
   try {
     if (err instanceof SyntaxError && "body" in err) {
@@ -80,9 +82,9 @@ router.get(
 router.get(
   "/filterModels",
   auth.checkUser,
-  mNM.filterModels,
+  mNM.newFilterValidation,
   async (req, res) => {
-    cntrModel.filterPlus(req, res);
+    cntrModel.filterPlus1(req, res);
   }
 );
 
