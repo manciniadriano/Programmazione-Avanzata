@@ -218,3 +218,28 @@ export const checkBinGenOverlap = (
     return true;
   }
 };
+
+export const filtraJSON = (json: any) => {
+  let stringModel: string = JSON.stringify(json);
+  let modelnew = JSON.parse(stringModel);
+
+  delete modelnew["id"];
+  delete modelnew["cost"];
+  delete modelnew["version"];
+  delete modelnew["creation_date"];
+  delete modelnew["options"];
+  delete modelnew["valid"];
+
+  let s = JSON.stringify(modelnew);
+  var t = s.replace(/"namemodel"/g, '"name"');
+  var z = t.replace(/"subjectto"/g, '"subjectTo"');
+
+  let modelFiltered = JSON.parse(z);
+  Object.keys(modelFiltered).forEach((key) => {
+    if (modelFiltered[key] === null) {
+      delete modelFiltered[key];
+    }
+  });
+
+  return modelFiltered;
+};

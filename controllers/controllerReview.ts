@@ -1,32 +1,9 @@
 import * as user from "../model/User";
 import * as auth from "../middleware/middleAuth";
 import * as model from "../model/Model";
+import { filtraJSON } from "../middleware/helpFunction/middleModFun";
 
 export class ReviewController {
-  public filtraJSON = (json: any) => {
-    let stringModel: string = JSON.stringify(json);
-    let modelnew = JSON.parse(stringModel);
-
-    delete modelnew["id"];
-    delete modelnew["cost"];
-    delete modelnew["version"];
-    delete modelnew["creation_date"];
-    delete modelnew["options"];
-    delete modelnew["valid"];
-
-    let s = JSON.stringify(modelnew);
-    var t = s.replace(/"namemodel"/g, '"name"');
-    var z = t.replace(/"subjectto"/g, '"subjectTo"');
-
-    let modelFiltered = JSON.parse(z);
-    Object.keys(modelFiltered).forEach((key) => {
-      if (modelFiltered[key] === null) {
-        delete modelFiltered[key];
-      }
-    });
-
-    return modelFiltered;
-  };
 
   public newReview = async (req, res) => {
     try {
@@ -66,7 +43,7 @@ export class ReviewController {
             return true;
           }
         })
-        .map((item) => this.filtraJSON(item));
+        .map((item) => filtraJSON(item));
       res.send(filteredReview);
     } catch {
       res.sendStatus(400);
@@ -90,7 +67,7 @@ export class ReviewController {
   public getDeletedReview = async (req, res) => {
     try {
       let models: any = await model.getDeletedReview();
-      let modelsF: any = models.map((item) => this.filtraJSON(item));
+      let modelsF: any = models.map((item) => filtraJSON(item));
       res.send(modelsF);
     } catch {
       res.sendStatus(404);

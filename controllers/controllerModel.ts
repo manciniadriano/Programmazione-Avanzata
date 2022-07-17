@@ -1,6 +1,7 @@
 import * as user from "../model/User";
 import * as auth from "../middleware/middleAuth";
 import * as model from "../model/Model";
+import { filtraJSON } from "../middleware/helpFunction/middleModFun";
 
 const GLPK = require("glpk.js");
 const glpk = GLPK();
@@ -26,30 +27,7 @@ export class ModelController {
     }
   };
 
-  public filtraJSON = (json: any) => {
-    let stringModel: string = JSON.stringify(json);
-    let modelnew = JSON.parse(stringModel);
-
-    delete modelnew["id"];
-    delete modelnew["cost"];
-    delete modelnew["version"];
-    delete modelnew["creation_date"];
-    delete modelnew["options"];
-    delete modelnew["valid"];
-
-    let s = JSON.stringify(modelnew);
-    var t = s.replace(/"namemodel"/g, '"name"');
-    var z = t.replace(/"subjectto"/g, '"subjectTo"');
-
-    let modelFiltered = JSON.parse(z);
-    Object.keys(modelFiltered).forEach((key) => {
-      if (modelFiltered[key] === null) {
-        delete modelFiltered[key];
-      }
-    });
-
-    return modelFiltered;
-  };
+  
 
   public solveModel = async (req, res) => {
     try {
@@ -58,7 +36,7 @@ export class ModelController {
         req.body.version
       );
       let options = JSON.stringify(modelSolve.options);
-      let filtrato = this.filtraJSON(modelSolve);
+      let filtrato = filtraJSON(modelSolve);
       let solveModel = glpk.solve(filtrato, options);
       res.status(200).json(solveModel);
     } catch (e) {
@@ -91,7 +69,7 @@ export class ModelController {
     try {
       let models: any = await model.getModels();
       let modelsF: any = models
-        .map((item) => this.filtraJSON(item))
+        .map((item) => filtraJSON(item))
         .filter((item) => {
           if (req.body.numvars) {
             return item.objective.vars.length === req.body.numvars;

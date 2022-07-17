@@ -2,6 +2,5 @@
 - verificare che le variabili dei vincoli siano
 presenti nella funzione obiettivo(da fare?)
 - dosimulation se specifico solo objective, attivo solo la fun di objective
-- mettere filtra json solo nel help function
-- error handler con factory
-- verificare che la delete review o la restore 
+- FiltraJSON nella controllerSimulation
+- error handler con factory 
