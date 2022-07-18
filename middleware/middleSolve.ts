@@ -129,27 +129,38 @@ const checksubjectToSim = (item) => {
   }
 };
 
-export const checkCreditSimulation = (req, res) => {
+export const checkCreditSimulation = async (req: any, res: any, next: any) => {
   try {
-    const budget: any = User.getBudget(req.user.email);
-    const cost: number = 1;
+    const user: any = await User.getBudget(req.user.email);
+    const model: any = await Model.getSpecificModel(
+      req.body.name,
+      req.body.version
+    );
+    let numberOfModel: number = 1;
     if (req.body.objective != undefined) {
       req.body.objective.map((item) => {
-        console.log(Math.round((item.end - item.start)/item.step));
-        (cost * ((item.end - item.start)/ item.step));
+        numberOfModel =
+          numberOfModel * ((item.end - item.start) / item.step + 1);
       });
     }
-    console.log(cost);
     if (req.body.subjectTo != undefined) {
-      req.body.subjectTo.map((item) =>{
-        console.log((item.vars.end - item.vars.start)/item.vars.step);
-        cost * ((item.vars.end - item.vars.start) / item.step)
-    });
+      req.body.subjectTo.map((item) => {
+        item.vars.map(
+          (elem) =>
+            (numberOfModel =
+              numberOfModel * ((elem.end - elem.start) / elem.step + 1))
+        );
+      });
     }
-    console.log(cost);
-    if (budget.budget < cost) {
+    let totalCost = numberOfModel * model.cost;
+    if (user.budget < totalCost) {
       throw "Unauthorized";
+    } else {
+      let newBudget = user.budget - totalCost;
+      console.log(newBudget);
+      await User.budgetUpdate(newBudget, req.user.email);
     }
+    next();
   } catch {
     res.sendStatus(401);
   }

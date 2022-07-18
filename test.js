@@ -1,10 +1,28 @@
-var objective = 
+
+
+var objective =
     [
         {
             "name": "x1",
             "start": 0.7,
             "end": 0.8,
             "step": 0.1
+        },
+        {
+
+            "name": "x2",
+            "start": 0.7,
+            "end": 0.8,
+            "step": 0.1
+
+        },
+        {
+
+            "name": "x3",
+            "start": 0.7,
+            "end": 0.8,
+            "step": 0.1
+
         }
     ]
 
@@ -13,7 +31,7 @@ var subject = [
         "name": "c1",
         "vars": [
             {
-                "name": "x2",
+                "name": "x1",
                 "start": 3.4,
                 "end": 3.5,
                 "step": 0.1
@@ -24,7 +42,7 @@ var subject = [
         "name": "c2",
         "vars": [
             {
-                "name": "x1",
+                "name": "x2",
                 "start": 4.3,
                 "end": 4.4,
                 "step": 0.1
@@ -58,18 +76,31 @@ objective.map((elem) => {
     array1.push(appoggio);
 });
 
-const cartesian = (...f) =>
-    f
-        .map((a) =>
-            a.reduce((a, b) => a.flatMap((d) => b.map((e) => [d, e].flat())))
-        );
+const cartesian =
+    (...a) => a.reduce((a, b) => a.map((f) => f.map(d => b.map((g) => g.map(e => [f, g].flat())))));
+/*
+      function cartesianProduct(...arrays) {
+          return [...arrays].reduce(
+            (a, b) =>
+              a.map((x) => b.map((y) => x.concat(y))).reduce((a, b) => a.concat(b), []),
+            [[]]
+          );
+        }
+*/
+//let output = cartesianProduct(array, array1);
+console.log(array1);
+// serve per effettuare il prodotto cartesiano su objective
+const cartesianObjective = (a) => a.reduce((a, b) => a.flatMap(d => b.map((e) => [d,e].flat())));
 
-let output = cartesian(array, array1);
-console.log(output);
-let final = cartesian(output, array1);
-//console.log(final);
-//console.log(final[0].length);
-//let final = cartesian(output[0], output[1]);
-//let final = cartesian(output, array1)
-//console.log(final[0])
+let ciao = cartesianObjective(array);
+let ciao1 = cartesianObjective(array1)
+console.log(JSON.stringify(cartesian(ciao, ciao1)))
+/*console.log(JSON.stringify(array[0]))
+let ciao = cartesian(JSON.stringify([array[0]], [array[1]]))
+console.log(ciao);*/
+//let final = cartesian(array, array1);
+//console.log(JSON.stringify(output));
+//console.log(JSON.stringify(final));
+
+
 
