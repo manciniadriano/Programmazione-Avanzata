@@ -1,4 +1,3 @@
-import { createSolutionBuilder } from "typescript";
 import { filtraJSON } from "../../middleware/helpFunction/middleModFun";
 
 const GLPK = require("glpk.js");
@@ -54,15 +53,56 @@ const glpk = GLPK();
     ]
 }
  */
-export const simulationWithObjSub = (
-  objectiveVars,
-  subjectToComb,
-  model,
-  solve
-) => {
+export const simulationWithObjSub = (allObject, model, solve) => {
   model = filtraJSON(model);
   var bestModel: string = null;
-  for (const elem of objectiveVars) {
+  allObject.map((a) => {
+    model.objective.vars.map((c) => {
+      a.map((b) => {
+        if (b.namesubject === undefined && c.name === b.name) {
+          c.coef = b.value;
+        }
+      });
+    });
+    model.subjectTo.map((c) => {
+      c.vars.map((d) => {
+        a.map((b) => {
+          if (
+            b.namesubject !== undefined &&
+            d.name === b.name &&
+            b.namesubject === c.name
+          ) {
+            d.coef = b.value;
+          }
+        });
+      });
+    });
+    //console.log(JSON.stringify(model));
+    let solution = glpk.solve(model);
+    console.log(model.objective.direction);
+    switch (model.objective.direction) {
+      case 1: {
+        let min = Math.min(...solve.map((item: any) => item.result.z));
+        if (bestModel === null && solve.length === 0) {
+          bestModel = Object.create(model);
+        } else if (solution.result.z < min) {
+          bestModel = Object.create(model);
+        }
+      }
+      case 2: {
+        let max = Math.max(...solve.map((item: any) => item.result.z));
+        if (bestModel == null && solve.length == 0) {
+          bestModel = JSON.stringify(model);
+        } else if (solution.result.z > max) {
+          bestModel = JSON.stringify(model);
+        }
+      }
+    }
+    solve.push(solution);
+  });
+  solve.push(bestModel);
+};
+/*for (const elem of objectiveVars) {
     for (const itemelem of elem) {
       for (const item of model.objective.vars) {
         if (item.name == itemelem.name) {
@@ -82,19 +122,21 @@ export const simulationWithObjSub = (
           }
         }
       }
-      console.log("vars model finali obiettivo: " + JSON.stringify(model.objective.vars));
+      console.log(
+        "vars model finali obiettivo: " + JSON.stringify(model.objective.vars)
+      );
       console.log("vars subjectto finali: " + JSON.stringify(model.subjectTo));
       let solution = glpk.solve(model);
-      if (model.objective.direction == 1) {
-        let min = Math.min(...solve.map((item: any) => item.result.z));
-        if (bestModel == null && solve.length == 0) {
-          //stringa per non creare un passaggio del modello per riferimento
-          bestModel = JSON.stringify(model);
-        } else if (solution.result.z < min) {
-          bestModel = JSON.stringify(model);
-        }
+      
+if (model.objective.direction == 1) {
+      let min = Math.min(...solve.map((item: any) => item.result.z));
+      if (bestModel == null && solve.length == 0) {
+        //stringa per non creare un passaggio del modello per riferimento
+        bestModel = JSON.stringify(model);
+      } else if (solution.result.z < min) {
+        bestModel = JSON.stringify(model);
       }
-
+    }
       if (model.objective.direction == 2) {
         let max = Math.max(...solve.map((item: any) => item.result.z));
         if (bestModel == null && solve.length == 0) {
@@ -108,9 +150,9 @@ export const simulationWithObjSub = (
   }
   let object = JSON.parse(bestModel);
   solve.push(object);
-};
+};*/
 
-export const simulationWithObj = (objectiveVars, model, solve) => {
+/*export const simulationWithObj = (objectiveVars, model, solve) => {
   var bestModel: string = null;
   for (const elem of objectiveVars) {
     for (const item of model.objective.vars) {
@@ -189,4 +231,4 @@ export const simulationWithSub = (subjectToComb, model, solve) => {
   }
   let object = JSON.parse(bestModel);
   solve.push(object);
-};
+};*/

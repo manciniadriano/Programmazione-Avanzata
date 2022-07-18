@@ -14,6 +14,7 @@ export class SimulationController {
       if (req.body.objective!== undefined && req.body.subjectTo!== undefined) {
         var objectiveVars = combinationFunctionObjective(req.body.objective);
         var subjectToComb = combinationFunctionSubjectTo(req.body.subjectTo);
+        var allObject = cartesianComb(objectiveVars, subjectToComb);
         c = 3;
       } else if (req.body.objective !== undefined) {
         var objectiveVars = combinationFunctionObjective(req.body.objective);
@@ -22,30 +23,15 @@ export class SimulationController {
         var subjectToComb = combinationFunctionSubjectTo(req.body.subjectTo);
         c = 2;
       }
-      console.log(c);
       let model: any = await getSpecificModel(req.body.name, req.body.version);
-      /*let modelCost = model.cost;
-      let budgetUser: any = await getBudget(req.user.email);
-      if (
-        budgetUser.budget <
-        totalCostSimulation(objectiveVars, subjectToComb, modelCost)
-      ) {
-        throw "Unauthorized";
-      } else {
-        let newBudget =
-          budgetUser.budget -
-          totalCostSimulation(objectiveVars, subjectToComb, modelCost);
-        await user.budgetUpdate(newBudget, req.user.email);
-      }*/
-      console.log(c);
       switch(c) {
-        case 1: helpSim.simulationWithObj(objectiveVars, model, solve); break;
-        case 2: helpSim.simulationWithSub(subjectToComb, model, solve); break;
-        case 3: helpSim.simulationWithObjSub(objectiveVars, subjectToComb, model, solve); break;
+        //case 1: helpSim.simulationWithObj(objectiveVars, model, solve); break;
+        //case 2: helpSim.simulationWithSub(subjectToComb, model, solve); break;
+        case 3: helpSim.simulationWithObjSub(allObject, model, solve); break;
       }
       res.send(solve);
     } catch (e) {
-        res.sendStatus(401);
+        res.sendStatus(404);
     }
   };
 }
@@ -62,14 +48,8 @@ const combinationFunctionObjective = (objective: any) => {
     }
     array.push(appoggio);
   });
-  const cartesian = (...f) =>
-    f
-      .map((a) =>
-        a.reduce((a, b) => a.flatMap((d) => b.map((e) => [d, e].flat())))
-      )
-      .flat();
 
-  let output = cartesian(array);
+  let output = cartesianObjective(array);
   return output;
 };
 
@@ -91,36 +71,9 @@ const combinationFunctionSubjectTo = (objective: any) => {
     });
   });
 
-  const cartesian = (...f) =>
-    f
-      .map((a) =>
-        a.reduce((a, b) => a.flatMap((d) => b.map((e) => [d, e].flat())))
-      )
-      .flat();
-
-  let output = cartesian(array);
+  let output = cartesianObjective(array);
   return output;
 };
 
-const totalCostSimulation = (
-  objective: any,
-  subject: any,
-  cost: number
-): number => {
-  let output = cartesian([subject], [objective]);
-  let final = cartesianProduct(output[0], output[1]);
-  return final.length * cost;
-};
-
-const cartesian = (...f) =>
-  f.map((a) =>
-    a.reduce((a, b) => a.flatMap((d) => b.map((e) => [d, e].flat())))
-  );
-
-function cartesianProduct(...arrays) {
-  return [...arrays].reduce(
-    (a, b) =>
-      a.map((x) => b.map((y) => x.concat(y))).reduce((a, b) => a.concat(b), []),
-    [[]]
-  );
-}
+const cartesianObjective = (a) => a.reduce((a, b) => a.flatMap(d => b.map((e) => [d, e].flat())));
+const cartesianComb = (array, array2) => array.flatMap((a) => array2.map(b => [a, b].flat()));

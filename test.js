@@ -35,6 +35,14 @@ var subject = [
                 "start": 3.4,
                 "end": 3.5,
                 "step": 0.1
+            },
+            {
+
+                "name": "x3",
+                "start": 0.7,
+                "end": 0.8,
+                "step": 0.1
+    
             }
         ]
     },
@@ -46,6 +54,14 @@ var subject = [
                 "start": 4.3,
                 "end": 4.4,
                 "step": 0.1
+            },
+            {
+
+                "name": "x4",
+                "start": 0.7,
+                "end": 0.8,
+                "step": 0.1
+    
             }
         ]
     }
@@ -88,13 +104,21 @@ const cartesian =
         }
 */
 //let output = cartesianProduct(array, array1);
-console.log(array1);
+console.log(array);
 // serve per effettuare il prodotto cartesiano su objective
-const cartesianObjective = (a) => a.reduce((a, b) => a.flatMap(d => b.map((e) => [d,e].flat())));
+const cartesianObjective = (a) => a.reduce((a, b) => a.flatMap(d => b.map((e) => [d, e].flat())));
+const cartesianSubjectTo = (a) => a.reduce((a, b) => a.flatMap(d => b.map((e) => [d, e].flat())));
 
-let ciao = cartesianObjective(array);
-let ciao1 = cartesianObjective(array1)
-console.log(JSON.stringify(cartesian(ciao, ciao1)))
+let ciao = cartesianSubjectTo(array);
+let ciao1 = cartesianObjective(array1);
+console.log(JSON.stringify(ciao));
+//console.log("subjective:   " + JSON.stringify(ciao));
+//console.log("objective:   " + JSON.stringify(ciao1));
+
+const cartesianComb = (array, array2) => array.flatMap((a) => array2.map(b => [a, b].flat()));
+//console.log("finale: " + JSON.stringify(cartesianComb(ciao, ciao1).length));
+//let elem = cartesian(ciao,ciao1);
+//console.log(JSON.stringify(elem))
 /*console.log(JSON.stringify(array[0]))
 let ciao = cartesian(JSON.stringify([array[0]], [array[1]]))
 console.log(ciao);*/
