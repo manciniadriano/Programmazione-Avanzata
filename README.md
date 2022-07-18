@@ -385,10 +385,31 @@ Di seguito i diagrammi UML:
 * Use Case Diagram
 ![Alt text](/UML/UseCase.png?raw=true "Use Case Diagram")
 
-
 * Sequence Diagram
+![Alt text](/UML/NewModel.jpg?raw=true "New Model")
+![Alt text](/UML/SolveModel.jpg?raw=true "Solve Model")
+![Alt text](/UML/newReview.jpg?raw=true "New Review")
+![Alt text](/UML/Admin.jpg?raw=true "Admin")
+![Alt text](/UML/filterReview.jpg?raw=true "Filter Review")
+![Alt text](/UML/filterModel.jpg?raw=true "Filter Model")
+![Alt text](/UML/deleteReview.jpg?raw=true "Delete Review")
+![Alt text](/UML/getDeletedReview.jpg?raw=true "Get Deleted Review")
+![Alt text](/UML/restoreReview.jpg?raw=true "Restore Review")
+![Alt text](/UML/getSimulation.jpg?raw=true "Get Simulation")
 
 ### Descrizione pattern utilizzati
+
+##### Singleton:
+
+Abbiamo deciso di utilizzare il pattern del Singleton, che consiste nel garantire che per la classe venga creata ed utilizzata una ed una sola istanza.
+In questo caso abbiamo associato il Singleton alla classe che realizza la connessione al db, per evitare connessioni multiple.
+
+![Alt text](/UML/Singleton.png?raw=true "Singleton")
+
+##### Middleware:
+
+Per middleware si intende uno strato intermedio che si occupa di validare le richieste.
+Nella nostra applicazione ogni richiesta passa al vaglio del middleware, che verifica la validità del token associato alla richiesta e della coerenza dei dati inseriti, e la possibilità di realizzare determinate azioni (si pensi al credito).
 
 ## Avvio di docker
 
