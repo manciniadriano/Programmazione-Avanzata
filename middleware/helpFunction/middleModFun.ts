@@ -4,7 +4,8 @@
  * @returns true o false in base alla correttezza della direction
  */
 const checkDirection = (field): boolean => {
-  if (field && typeof Number.isInteger(field) && (field === 1 || field === 2)) {
+  // nota: direction 1 è problema di minimo, 2 di massimo.
+  if (field && typeof Number.isInteger(field) && (field === 1 || field === 2)) { // verifichiamo che la direzione esista, sia un intero e che sia 1 o 2.
     return true;
   } else {
     return false;
@@ -41,12 +42,21 @@ const checkUbLb = (object): boolean => {
     typeof object.ub === "number" &&
     typeof object.lb === "number"
   ) {
+
+    /**
+     type of auxiliary/structural variable:
+    readonly GLP_FR: number;   free (unbounded) variable 
+    readonly GLP_LO: number;   variable with lower bound 
+    readonly GLP_UP: number;   variable with upper bound 
+    readonly GLP_DB: number;   double-bounded variable 
+    readonly GLP_FX: number;   fixed variable 
+     */
     let c: number = object.type;
     switch (c) {
       case 1: {
-        return true;
+        return true; // unbounded: nessun controllo necessario.
       }
-      case 2: {
+      case 2: { // lower bound, verifichiamo che sia scritto correttamente (lower bound >= upper bound).
         if (
           object.lb >= object.ub &&
           (object.ub === null || object.ub === 0 || object.ub === undefined)
@@ -54,7 +64,7 @@ const checkUbLb = (object): boolean => {
           return true;
         } else return false;
       }
-      case 3: {
+      case 3: { // upper bound, verifichiamo che sia scritto correttamente (upper bound >= lower bound).
         if (
           object.ub >= object.lb &&
           (object.lb === null || object.lb === 0 || object.lb === undefined)
@@ -62,12 +72,12 @@ const checkUbLb = (object): boolean => {
           return true;
         } else return false;
       }
-      case 4: {
+      case 4: { // double bounded, vogliamo solo che lb sia < di ub.
         if (object.lb < object.ub) {
           return true;
         } else return false;
       }
-      case 5: {
+      case 5: { // variabile fissata, devono coincidere i 2 bound.
         if (object.lb === object.ub) {
           return true;
         } else return false;
@@ -126,7 +136,7 @@ export const checkObjective = (objective: any): boolean => {
  */
 export const checkSubjectTo = (subjectTo: any): boolean => {
   if (subjectTo != undefined) {
-    for (const item of subjectTo) {
+    for (const item of subjectTo) { // per ogni elemento dell'array dei vincoli verifichiamo che sia ok
       if (
         checkName(item.name) &&
         checkVars(item.vars) &&
@@ -150,7 +160,7 @@ export const checkSubjectTo = (subjectTo: any): boolean => {
 export const checkBounds = (bounds: any): boolean => {
   if (bounds != undefined) {
     for (const item of bounds) {
-      if (checkName(item.name) && checkUbLb(item)) {
+      if (checkName(item.name) && checkUbLb(item)) { // sui bounds opzionali mi basta fare una verifica sul nome e sui upper/lower bounds inseriti
       } else {
         return false;
       }
@@ -163,7 +173,7 @@ export const checkBounds = (bounds: any): boolean => {
 
 /**
  * Verifica se binaries/generals è un'array di sole stringhe, verifica anche che la variabile sia presente nella funziona obiettivo
- * @param binaries l'array binaries del modello
+ * @param binaries l'array binaries/generals del modello
  * @param vars l'oggetto vars della funzione obiettivo
  * @returns true o false a seconda se l'oggetto è scritto correttamente
  */
@@ -173,7 +183,8 @@ export const checkBinariesGenerals = (
 ): boolean => {
   if (binaries != undefined) {
     let check: boolean[] = binaries.map((item) => {
-      let c = vars.some((i) => i.name.includes(item));
+      let c = vars.some((i) => i.name.includes(item)); // Il metodo some() verifica se almeno un elemento nell'array supera il test implementato dalla funzione
+                                                       // in questo caso il metodo è che le variabili contengano l'elemento del binary/general corrente.
       if (typeof item === "string" && c) {
         return true;
       } else {
@@ -202,13 +213,13 @@ export const checkBinGenOverlap = (
 ): boolean => {
   if (binaries != undefined && generals != undefined) {
     let check: boolean[] = binaries.map((item) => {
-      if (generals.includes(item)) {
+      if (generals.includes(item)) { // verifico che generals non contenga elementi che siano già dentro binaries
         return false;
       } else {
         return true;
       }
     });
-    console.log(check);
+    
     if (check.includes(false)) {
       return false;
     } else {
@@ -219,6 +230,11 @@ export const checkBinGenOverlap = (
   }
 };
 
+/**
+ * questo metodo filtra il modello, togliendo gli elementi nel db non necessari per la visualizzazione del modello.
+ * @param json 
+ * @returns il modello filtrato
+ */
 export const filtraJSON = (json: any) => {
   let stringModel: string = JSON.stringify(json);
   let modelnew = JSON.parse(stringModel);
@@ -231,11 +247,11 @@ export const filtraJSON = (json: any) => {
   delete modelnew["valid"];
 
   let s = JSON.stringify(modelnew);
-  var t = s.replace(/"namemodel"/g, '"name"');
+  var t = s.replace(/"namemodel"/g, '"name"'); // rinomino namemodel (voce nel db) in name, per la visualizzazione
   var z = t.replace(/"subjectto"/g, '"subjectTo"');
 
   let modelFiltered = JSON.parse(z);
-  Object.keys(modelFiltered).forEach((key) => {
+  Object.keys(modelFiltered).forEach((key) => { // filtro tutte le chiavi nulle, non essendo necessarie
     if (modelFiltered[key] === null) {
       delete modelFiltered[key];
     }
@@ -244,16 +260,25 @@ export const filtraJSON = (json: any) => {
   return modelFiltered;
 };
 
-
+/**
+ * verifico che il numvars/numsub che setto nel filtro dei modelli sia scritto correttamente
+ * @param numvars numero di variabili che vogliamo
+ * @returns l'esito del controllo
+ */
 export const checkNum = (numvars: any): boolean => {
   if (numvars != undefined) {
-    if (numvars && typeof numvars === "number") {
+    if (numvars && typeof numvars === "number") { // voglio che numvars e/o numsub sia un numero e che sia >0, se specificato
       return numvars > 0
     }
     else return false;
   } else return true;
 };
 
+/**
+ * qui verifico che il filtro sia inserito o meno, se sia inserito come numero, e che sia 0 o 1.
+ * @param filter continuous,binaries,generals, settati a 0 o 1 se li voglio o meno
+ * @returns l'esito del filtro
+ */
 export const check3Filter = (filter: any): boolean => {
   if (filter != undefined) {
     if (typeof filter === "number") {

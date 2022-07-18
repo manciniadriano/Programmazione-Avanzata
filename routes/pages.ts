@@ -24,7 +24,6 @@ router.use((err, req, res, next) => {
     }
     next();
   } catch (e){
-    console.log(e);
     res.sendStatus(400);
   }
 });
@@ -114,7 +113,6 @@ router.get(
   "/getSimulation",
   auth.checkUser,
   solve.checkDoSimulation,
-  solve.checkCreditSimulation,
   async (req, res) => {
     cntrSimulation.doSimulation(req, res);
   }

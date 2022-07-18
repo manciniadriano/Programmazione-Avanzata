@@ -17,7 +17,7 @@ export async function checkAdmin(req, res, next) {
   }
 }
 
-export async function CheckReceiver(req, res, next) {
+export async function CheckReceiver(req, res, next) { // verifico che il ricevente esista effettivamente.
   const user: any = await User.checkExistingUser(req.user.emailuser);
   if (user.email === req.user.emailuser) {
     next();

@@ -2,7 +2,7 @@ require('dotenv').config();
 import { Sequelize} from "sequelize";
 //require('dotenv').config({ path: __dirname+'../.env' });
 
-export class SingletonDB {
+export class SingletonDB { // connessione al db realizzata con classe Singleton
     private static instance: SingletonDB;
     private singleConnection: Sequelize; 
 
@@ -20,7 +20,7 @@ export class SingletonDB {
 
             },  
             logging:false});
-            console.log("Connessione riuscita");
+            
     }
 
     public static getInstance(): SingletonDB {

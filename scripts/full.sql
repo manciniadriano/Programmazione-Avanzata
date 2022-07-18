@@ -20,10 +20,12 @@ CREATE TABLE models(
   valid boolean
 );
 
+-- inserimento di 2 utenti
 INSERT INTO users(email, budget) VALUES
 ('user@user.com', 5),
 ('nicola@nicola.com', 100);
 
+-- inserimento del primo modello
 INSERT INTO models(namemodel,objective,subjectto,binaries,options,version,cost,creation_date,valid) VALUES
 ('mip_with_binaries',
 '{"direction": 1,"name": "obj","vars": [{"name": "x1","coef": -1},{"name": "x2","coef": -2},{"name": "x3","coef": 0.1},{"name": "x4","coef": 3}]}',
@@ -35,6 +37,7 @@ INSERT INTO models(namemodel,objective,subjectto,binaries,options,version,cost,c
 '7/17/2022',
 true);
 
+-- inserimento del secondo modello
 INSERT INTO models(namemodel,objective,subjectto,bounds,generals,options,version,cost,creation_date,valid) VALUES
 ('mip',
 '{"direction": 2,"name": "obj","vars": [{"name": "x1","coef": 1},{"name": "x2","coef": 2},{"name": "x3","coef": 3},{"name": "x4","coef": 1}]}',
@@ -47,6 +50,7 @@ INSERT INTO models(namemodel,objective,subjectto,bounds,generals,options,version
 '7/17/2022',
 true);
 
+-- inserimento della prima revisione del primo modello (cambio coefficienti della funzione obiettivo)
 INSERT INTO models(namemodel,objective,subjectto,binaries,options,version,cost,creation_date,valid) VALUES
 ('mip_with_binaries',
 '{"direction": 1,"name": "obj","vars": [{"name": "x1","coef": 2},{"name": "x2","coef": 3},{"name": "x3","coef": 4},{"name": "x4","coef": 5}]}',
@@ -58,6 +62,7 @@ INSERT INTO models(namemodel,objective,subjectto,binaries,options,version,cost,c
 '7/17/2022',
 true);
 
+-- inserimento della seconda revisione del primo modello (cambio coefficienti della funzione obiettivo)
 INSERT INTO models(namemodel,objective,subjectto,binaries,options,version,cost,creation_date,valid) VALUES
 ('mip_with_binaries',
 '{"direction": 1,"name": "obj","vars": [{"name": "x1","coef": 1},{"name": "x2","coef": 2},{"name": "x3","coef": 3},{"name": "x4","coef": 4}]}',
@@ -69,6 +74,7 @@ INSERT INTO models(namemodel,objective,subjectto,binaries,options,version,cost,c
 '7/17/2022',
 true);
 
+-- inserimento della prima revisione del secondo modello (cambio coefficienti della funzione obiettivo)
 INSERT INTO models(namemodel,objective,subjectto,bounds,generals,options,version,cost,creation_date,valid) VALUES
 ('mip',
 '{"direction": 2,"name": "obj","vars": [{"name": "x1","coef": 2},{"name": "x2","coef": 3},{"name": "x3","coef": 4},{"name": "x4","coef": 5}]}',
@@ -81,6 +87,7 @@ INSERT INTO models(namemodel,objective,subjectto,bounds,generals,options,version
 '7/17/2022',
 true);
 
+-- inserimento della seconda revisione del secondo modello (cambio coefficienti della funzione obiettivo)
 INSERT INTO models(namemodel,objective,subjectto,bounds,generals,options,version,cost,creation_date,valid) VALUES
 ('mip',
 '{"direction": 2,"name": "obj","vars": [{"name": "x1","coef": 3},{"name": "x2","coef": 4},{"name": "x3","coef": 5},{"name": "x4","coef": 6}]}',

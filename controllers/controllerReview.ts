@@ -7,15 +7,15 @@ export class ReviewController {
 
   public newReview = async (req, res) => {
     try {
-      let modelCheck: any = await model.checkExistingModel(req.body.name);
+      let modelCheck: any = await model.checkExistingModel(req.body.name); 
       if (modelCheck) {
         let version = modelCheck.version;
         let totalCost: number =
-          (auth.costContraint(req.body) + auth.checkBinOrInt(req.body)) * 0.5;
-        await model.insertReview(req.body, version + 1, totalCost);
+          (auth.costContraint(req.body) + auth.checkBinOrInt(req.body)) * 0.5; // calcoliamo il costo della review, tenendo conto del fattore 0.5
+        await model.insertReview(req.body, version + 1, totalCost); // inseriamo nel db una revisione, settando la versione come intero incrementato.
         let oldBudget: any = await user.getBudget(req.user.email);
         let newBudget = oldBudget.budget - totalCost;
-        await user.budgetUpdate(newBudget, req.user.email);
+        await user.budgetUpdate(newBudget, req.user.email); // update del budget dell'utente
         res.sendStatus(201);
       } else {
         res.sendStatus(404);
@@ -24,21 +24,25 @@ export class ReviewController {
       res.sendStatus(404);
     }
   };
-
+/**
+ * qui si filtrano le revisioni sulla base della data (date) e del numero di variabili (numvars)
+ * @param req request
+ * @param res response
+ */
   public filterReview = async (req, res) => {
     try {
       let reviews: any = await model.getReviewOfModel(req.body.name);
       let filteredReview = reviews
         .filter((item) => {
           if (req.body.date) {
-            return req.body.date === item.creation_date;
+            return req.body.date === item.creation_date; // confronto le stringhe relative alla data.
           } else {
             return true;
           }
         })
         .filter((item) => {
           if (req.body.numvars) {
-            return req.body.numvars === item.objective.vars.length;
+            return req.body.numvars === item.objective.vars.length; // verifico che la lunghezza del vettore delle variabili sia quanto richiesto nel filtro.
           } else {
             return true;
           }
