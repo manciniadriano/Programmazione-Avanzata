@@ -380,6 +380,14 @@ Qui riportiamo dunque un esempio di simulazione, in cui si modifica il coefficie
 
 ### Diagrammi UML
 
+Di seguito i diagrammi UML:
+
+* Use Case Diagram
+![Alt text](/UML/UseCase.png?raw=true "Use Case Diagram")
+
+
+* Sequence Diagram
+
 ### Descrizione pattern utilizzati
 
 ## Avvio di docker
