@@ -423,9 +423,11 @@ Qui riportiamo dunque un esempio di simulazione, in cui si modifica il coefficie
 Di seguito i diagrammi UML:
 
 * Use Case Diagram
+* 
 ![Alt text](/UML/UseCase.png?raw=true "Use Case Diagram")
 
 * Sequence Diagram
+* 
 ![Alt text](/UML/NewModel.jpg?raw=true "New Model")
 ![Alt text](/UML/SolveModel.jpg?raw=true "Solve Model")
 ![Alt text](/UML/newReview.jpg?raw=true "New Review")
@@ -491,4 +493,4 @@ SECRET_KEY=secret
 
 Per realizzare il Test del seguente progetto, abbiamo caricato il file ``` Models.postman_collection.json ``` nella repository, che a sua volta dovrà essere importato all'interno di Postman.
 
-**si ringrazia il Professor Adriano Mancini**
+**Si ringrazia il Professor Adriano Mancini**
