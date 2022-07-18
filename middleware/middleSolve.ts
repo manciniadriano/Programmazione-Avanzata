@@ -128,3 +128,29 @@ const checksubjectToSim = (item) => {
     return false;
   }
 };
+
+export const checkCreditSimulation = (req, res) => {
+  try {
+    const budget: any = User.getBudget(req.user.email);
+    const cost: number = 1;
+    if (req.body.objective != undefined) {
+      req.body.objective.map((item) => {
+        console.log(Math.round((item.end - item.start)/item.step));
+        (cost * ((item.end - item.start)/ item.step));
+      });
+    }
+    console.log(cost);
+    if (req.body.subjectTo != undefined) {
+      req.body.subjectTo.map((item) =>{
+        console.log((item.vars.end - item.vars.start)/item.vars.step);
+        cost * ((item.vars.end - item.vars.start) / item.step)
+    });
+    }
+    console.log(cost);
+    if (budget.budget < cost) {
+      throw "Unauthorized";
+    }
+  } catch {
+    res.sendStatus(401);
+  }
+};

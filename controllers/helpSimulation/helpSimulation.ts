@@ -1,3 +1,4 @@
+import { createSolutionBuilder } from "typescript";
 import { filtraJSON } from "../../middleware/helpFunction/middleModFun";
 
 const GLPK = require("glpk.js");
@@ -59,11 +60,14 @@ export const simulationWithObjSub = (
   model,
   solve
 ) => {
+  model = filtraJSON(model);
   var bestModel: string = null;
   for (const elem of objectiveVars) {
-    for (const item of model.objective.vars) {
-      if (item.name == elem.name) {
-        item["coef"] = elem.value;
+    for (const itemelem of elem) {
+      for (const item of model.objective.vars) {
+        if (item.name == itemelem.name) {
+          item["coef"] = itemelem.value;
+        }
       }
     }
     for (const subcomb of subjectToComb) {
@@ -78,15 +82,16 @@ export const simulationWithObjSub = (
           }
         }
       }
-      console.log(JSON.stringify(model));
+      console.log("vars model finali obiettivo: " + JSON.stringify(model.objective.vars));
+      console.log("vars subjectto finali: " + JSON.stringify(model.subjectTo));
       let solution = glpk.solve(model);
       if (model.objective.direction == 1) {
-        if (
-          solution.result.z <
-            Math.min(...solve.map((item: any) => item.result.z)) ||
-          bestModel == null
-        ) {
-          bestModel = model;
+        let min = Math.min(...solve.map((item: any) => item.result.z));
+        if (bestModel == null && solve.length == 0) {
+          //stringa per non creare un passaggio del modello per riferimento
+          bestModel = JSON.stringify(model);
+        } else if (solution.result.z < min) {
+          bestModel = JSON.stringify(model);
         }
       }
 
@@ -94,9 +99,7 @@ export const simulationWithObjSub = (
         let max = Math.max(...solve.map((item: any) => item.result.z));
         if (bestModel == null && solve.length == 0) {
           bestModel = JSON.stringify(model);
-          console.log("caso base");
         } else if (solution.result.z > max) {
-          //scelta della stringa poiché con oggetti passaggio per riferimento
           bestModel = JSON.stringify(model);
         }
       }
