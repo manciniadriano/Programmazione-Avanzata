@@ -66,6 +66,7 @@ export async function checkDoSimulation(req: any, res: any, next: any) {
     ) {
       //Controllo per le variabili della funzione obiettivo
       if (req.body.objective != undefined && checkVarsSim(req.body.objective)) {
+      } else if (req.body.objective == undefined) {
       } else {
         throw "Bad Request";
       }
@@ -127,4 +128,3 @@ const checksubjectToSim = (item) => {
     return false;
   }
 };
-
