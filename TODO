@@ -1,7 +1,4 @@
-- dosimulation se specifico solo objective, attivo solo la fun di objective
-- il calcolo del prezzo della simulazione andrebbe fatto a livello di middleware
 - non funziona la simulation quando metto più variabili nell'objective e più subjectTo. Da provare con più vars nella subjectTo.
-- commentare il codice della solve.
 
 - error handler con factory (?) 
 - finire ReadMe

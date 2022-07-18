@@ -8,6 +8,12 @@ interface doSimulation {
 }
 
 class ConcreteSimulationOnlyObj implements doSimulation {
+  /**
+ * Funzione per risolvere i modelli dove vengono modificati solo i coefficienti della funzione obiettivo
+ * @param objectiveComb combinazioni dei coefficienti dei diversi modelli da calcolare
+ * @param model modello su cui effettuare il calcolo
+ * @param solve array delle soluzioni
+ */
   public doSimulation(objectiveComb, model, solve) {
     model = filtraJSON(model);
     var bestModel = null;
@@ -47,6 +53,12 @@ class ConcreteSimulationOnlyObj implements doSimulation {
 }
 
 class ConcreteSimulationOnlySub implements doSimulation {
+  /**
+ * Funzione per modificare solamente i coef dei vincoli
+ * @param subjectComb combinazioni dei diversi coefficienti per il modello da calcolare
+ * @param model modello su cui effettuare il calcolo
+ * @param solve array delle soluzioni
+ */
   public doSimulation(subjectComb, model, solve) {
     console.log(JSON.stringify(subjectComb));
     model = filtraJSON(model);
@@ -93,6 +105,12 @@ class ConcreteSimulationOnlySub implements doSimulation {
 }
 
 class ConcreteSimulationObjSub implements doSimulation {
+  /**
+ * Funzione per risolvere i modelli dove vengono modificati sia funzione obiettivo che vincoli
+ * @param allObject array di array di oggetti, ogni oggetto contiene una combinazione tra var obiettivo e var vincoli
+ * @param model modello da risolvere
+ * @param solve array dove pushare le soluzioni
+ */
   public doSimulation(allObject, model, solve) {
     model = filtraJSON(model);
     var bestModel: string = null;
