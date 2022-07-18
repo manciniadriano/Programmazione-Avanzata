@@ -65,69 +65,6 @@ export class ModelController {
     }
   };
 
-  public filterPlus = async (req, res) => {
-    try {
-      let models: any = await model.getModels();
-      let modelsF: any = models
-        .map((item) => filtraJSON(item))
-        .filter((item) => {
-          if (req.body.numvars) {
-            return item.objective.vars.length === req.body.numvars;
-          } else return true;
-        })
-        .filter((item) => {
-          if (req.body.numsub) {
-            return item.subjectTo.length === req.body.numsub;
-          } else return true;
-        })
-        .filter((item) => {
-          let numGen: number = 0;
-          let numBin: number = 0;
-          if (item.generals) {
-            numGen = item.generals.length;
-          }
-          if (item.binaries) {
-            numBin = item.binaries.length;
-          }
-          let notContinuous = numGen + numBin;
-          let totalVars = item.objective.vars.length;
-          if (req.body.countinous == 1) {
-            if (totalVars - notContinuous > 0) {
-              return true;
-            } else {
-              return false;
-            }
-          } else {
-            if (totalVars - notContinuous > 0) {
-              return false;
-            } else {
-              return true;
-            }
-          }
-        })
-        .filter((item) => {
-          if (req.body.generals === 1) {
-            if (!(item.generals === undefined)) {
-              return true;
-            } else return false;
-          } else {
-            return item.generals === undefined;
-          }
-        })
-        .filter((item) => {
-          if (req.body.binaries === 1) {
-            if (!(item.binaries === undefined)) {
-              return true;
-            } else return false;
-          } else {
-            return item.binaries === undefined;
-          }
-        });
-      res.send(modelsF);
-    } catch (e) {
-      res.sendStatus(400);
-    }
-  };
 
 public filterPlus1 = async (req, res) => {
   
@@ -165,12 +102,12 @@ public filterPlus1 = async (req, res) => {
             if((item.binaries === undefined) && (item.generals === undefined)) return false;
             if((item.binaries === undefined) && (item.generals !== undefined)) return item.generals.length === item.objective.vars.length;
             if((item.binaries !== undefined) && (item.generals === undefined)) return item.binaries.length === item.objective.vars.length;
-            if((item.binaries !== undefined) && (item.generals !== undefined)) return (item.binaries.length+item.generals.length) === item.objective.length;
+            if((item.binaries !== undefined) && (item.generals !== undefined)) return (item.binaries.length+item.generals.length) === item.objective.vars.length;
           } else {
             if((item.binaries === undefined) && (item.generals === undefined)) return true;
             if((item.binaries === undefined) && (item.generals !== undefined)) return item.generals.length < item.objective.vars.length;
             if((item.binaries !== undefined) && (item.generals === undefined)) return item.binaries.length < item.objective.vars.length;
-            if((item.binaries !== undefined) && (item.generals !== undefined)) return (item.binaries.length+item.generals.length) < item.objective.length;
+            if((item.binaries !== undefined) && (item.generals !== undefined)) return (item.binaries.length+item.generals.length) < item.objective.vars.length;
           }
         } else return true;
         }

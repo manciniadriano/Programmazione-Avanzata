@@ -43,20 +43,8 @@ const validationModel = (model: any): boolean => {
   }
 };
 
-/**
- * Middleware per la richiesta di filtro dei model
- * @param req request
- * @param res response
- * @param next 
- * {
-    "numvars": 2,
-    "numsub":3,
-    "continuous": 1,
-    "generals": 1,
-    "binaries": 0
-}
- */
-export const filterModels = (req: any, res: any, next: any) => {
+
+/*export const filterModels = (req: any, res: any, next: any) => {
   try {
     if (
       Number.isInteger(req.body.numvars) &&
@@ -77,12 +65,26 @@ export const filterModels = (req: any, res: any, next: any) => {
   } catch {
     res.sendStatus(400);
   }
-};
+};*/
 
+
+/**
+ * Middleware per la richiesta di filtro dei model
+ * @param req request
+ * @param res response
+ * @param next 
+ * {
+    "numvars": 2, numero di variabili 
+    "numsub":3, numero di vincoli
+    "continuous": 1, ci sono variabili continue, valore binario. se non lo specifico non filtro su di esso.
+    "generals": 1, se metto 0 filtro su quelli che non hanno vars continue
+    "binaries": 0
+}
+ */
 
 export async function newFilterValidation(req: any, res: any, next: any) {
   try {
-    let response = await filterModelsMIO(req.body);
+    let response = await filterModels(req.body);
     if (response) {
       next();
     } else {
@@ -94,7 +96,7 @@ export async function newFilterValidation(req: any, res: any, next: any) {
 }
 
 
-export const filterModelsMIO = (req: any): boolean => {
+export const filterModels = (req: any): boolean => {
   if (
     mf.checkNum(req.numvars) &&
     mf.checkNum(req.numsub) &&

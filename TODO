@@ -1,6 +1,9 @@
-- vedere filtri e middleFiltri sui model
-- verificare che le variabili dei vincoli siano
-presenti nella funzione obiettivo(da fare?)
+- verificare che le variabili dei vincoli siano presenti nella funzione obiettivo(da fare?)
 - dosimulation se specifico solo objective, attivo solo la fun di objective
-- FiltraJSON nella controllerSimulation
 - error handler con factory 
+- non mischiare italiano e inglese (nel db penso)
+- il calcolo del prezzo della simulazione andrebbe fatto a livello di middleware
+- i filtri sui model funzionano bene? verifica bene
+- non funziona la simulation quando metto più variabili nell'objective e più subjectTo. Da provare con più vars nella subjectTo.
+- nel middleModFun ci servono tutte quelle funzioni?
+- se nella funzione obiettivo metto la stessa var 2 volte?
