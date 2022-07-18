@@ -64,6 +64,46 @@ In particolare realizzare un sistema che consenta la creazione e valutazione di 
 
 ## Progettazione
 
+##### Gestione Token
+
+admin ruolo email user e budget
+email ruolo
+
+Come da specifica, ogni richiesta deve contenere anche un token JWT, che conterrà i dati essenziali e permetterà l'autenticazione.
+Nel nostro caso, avremo 2 tipologie di token accettate dai nostri middleware dell'applicazione: il token dello user ed il token dell'admin.
+Il token JWT della prima tipologia conterrà l'email dell'utente ed il ruolo, e sarà firmato con la chiave segreta.
+
+Dunque ecco il payload associato al token dell'utente:
+
+```
+{
+  "iss": "",
+  "iat": 1657573105,
+  "exp": 1689109105,
+  "aud": "",
+  "sub": "",
+  "email": "user@user.com",
+  "role": "1"
+}
+```
+
+Invece il token JWT per una richiesta associata ad un utente di tipo admin conterrà i dati essenziali per l'operazione di ricarica del credito di un utente, essendo questa l'unica operazione che può fare un admin.
+Dunque ci saranno il ruolo dell'admin, l'email dell'utente a cui fare la ricarica ed infine il budget da aggiungere a quello attuale dell'utente.
+Pertanto il token JWT per l'admin è come segue:
+
+```
+{
+  "iss": "",
+  "iat": 1658164323,
+  "exp": 1689700323,
+  "aud": "",
+  "sub": "",
+  "role": "2",
+  "emailuser": "user@user.com",
+  "budget": "200"
+}
+```
+
 ##### 1) /newModel
 
 La prima rotta è quella che ci permette di istanziare un nuovo modello nel database.
@@ -399,18 +439,56 @@ Di seguito i diagrammi UML:
 
 ### Descrizione pattern utilizzati
 
-##### Singleton:
+#### MVC:
+
+La nostra applicazione si basa sul design pattern MVC, che permette di scomporre tutta l'applicazione in 3 parti: Model, View, Controller.
+
+![Alt text](/UML/MVC.png?raw=true "Pattern MVC")
+
+* Il Model contiene solo i dati dell'applicazione puri, non contiene la logica che descrive come presentare i dati a un utente.
+* La View presenta i dati del modello all'utente. La vista sa come accedere ai dati del modello, ma non sa cosa significano questi dati o cosa l'utente può fare per manipolarli. Chiaramente, non essendo la nostra applicazione provvista di un frontend, abbiamo simulato che il frontend fosse la schermata di Postman con cui si inviano le richieste.
+* Il Controller esiste tra la View e il Model. Si occupa di realizzare tutte le operazioni che vengono richieste dall'utente mediante API Request, che siano GET o POST.
+
+Ad essi abbiamo aggiunto una componente supplementare, il Router, che si occupa di attivare il middleware, raccogliere le richieste, attivando così il metodo corrispondente del controller corretto.
+
+#### Singleton:
 
 Abbiamo deciso di utilizzare il pattern del Singleton, che consiste nel garantire che per la classe venga creata ed utilizzata una ed una sola istanza.
 In questo caso abbiamo associato il Singleton alla classe che realizza la connessione al db, per evitare connessioni multiple.
 
 ![Alt text](/UML/Singleton.png?raw=true "Singleton")
 
-##### Middleware:
+#### Middleware:
 
 Per middleware si intende uno strato intermedio che si occupa di validare le richieste.
 Nella nostra applicazione ogni richiesta passa al vaglio del middleware, che verifica la validità del token associato alla richiesta e della coerenza dei dati inseriti, e la possibilità di realizzare determinate azioni (si pensi al credito).
 
 ## Avvio di docker
 
+All'avvio, il database sarà popolato con una tabella ``` users``` con 2 utenti, con email ```user@user.com``` e ```nicola@nicola.com```.
+Inoltre sarà presente anche una tabella ```models``` in cui saranno presenti 2 modelli, ciascuno di essi corredato di 2 revisioni, come da specifica, di cui si è cambiato i coefficienti di una variabile nella funzione obiettivo.
+
+* Necessario che l'ambiente Docker sia installato sulla propria macchina
+
+* Creare un file chiamato ".env" con questa struttura: (sostituire 'secretkey' con la chiave con la quale verranno generati i token JWT)
+
+```
+PGUSER=postgres
+PGDATABASE=prga
+PGHOST=dbpg
+PGPASSWORD=postgres
+PGPORT=5432
+SECRET_KEY=secret
+```
+
+* Avviare Docker mediante il comando seguente:
+
+``` docker-compose up ```
+
+* troverete il servizio nella porta 8080 del localhost.
+
 ## Test
+
+Per realizzare il Test del seguente progetto, abbiamo caricato il file Models.postman_collection.json nella repository, che a sua volta dovrà essere importato all'interno di Postman.
+
+** si ringrazia il Professor Adriano Mancini **
