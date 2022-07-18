@@ -470,6 +470,10 @@ Nella nostra applicazione ogni richiesta passa al vaglio del middleware, che ver
 L'Abstract Factory fornisce un'interfaccia per creare famiglie di oggetti connessi o dipendenti tra loro, in modo che non ci sia necessità da parte dei client di specificare i nomi delle classi concrete all'interno del proprio codice. 
 Nella nostro caso è stato utilizzato nel file abstractSimulation.ts nella cartella controllers, in quanto la simulazione viene effettuata in modo differente a seconda se nella richiesta sono stati specificati cambiamenti solamente nella funzione obiettivo, solamente nei vincoli, oppure in entrambi. Quindi la factory produrrà l'oggetto corretto nel controller a seconda del caso in cui ci troviamo.
 
+#### Builder
+
+Era previsto per la gestione del campo options, qualora ci fosse la necessità di specificare i valori nell'oggetto, nel nostro caso il builder fornirà direttamente alla creazione solamente i valori di default.  
+
 ## Avvio di docker
 
 All'avvio, il database sarà popolato con una tabella ``` users``` con 2 utenti, con email ```user@user.com``` e ```nicola@nicola.com```.
