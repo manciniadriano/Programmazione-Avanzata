@@ -423,11 +423,11 @@ Qui riportiamo dunque un esempio di simulazione, in cui si modifica il coefficie
 Di seguito i diagrammi UML:
 
 * Use Case Diagram
-* 
+ 
 ![Alt text](/UML/UseCase.png?raw=true "Use Case Diagram")
 
 * Sequence Diagram
-* 
+ 
 ![Alt text](/UML/NewModel.jpg?raw=true "New Model")
 ![Alt text](/UML/SolveModel.jpg?raw=true "Solve Model")
 ![Alt text](/UML/newReview.jpg?raw=true "New Review")
