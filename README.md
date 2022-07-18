@@ -470,7 +470,7 @@ Inoltre sarà presente anche una tabella ```models``` in cui saranno presenti 2 
 
 * Necessario che l'ambiente Docker sia installato sulla propria macchina
 
-* Creare un file chiamato ".env" con questa struttura: (sostituire 'secretkey' con la chiave con la quale verranno generati i token JWT)
+* Creare un file chiamato ".env" con questa struttura: (sostituire 'secret' con la chiave con la quale verranno generati i token JWT)
 
 ```
 PGUSER=postgres
@@ -489,6 +489,6 @@ SECRET_KEY=secret
 
 ## Test
 
-Per realizzare il Test del seguente progetto, abbiamo caricato il file Models.postman_collection.json nella repository, che a sua volta dovrà essere importato all'interno di Postman.
+Per realizzare il Test del seguente progetto, abbiamo caricato il file ``` Models.postman_collection.json ``` nella repository, che a sua volta dovrà essere importato all'interno di Postman.
 
-** si ringrazia il Professor Adriano Mancini **
+**si ringrazia il Professor Adriano Mancini**
