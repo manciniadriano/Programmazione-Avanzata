@@ -3,6 +3,7 @@ import { getBudget } from "../model/User";
 import * as user from "../model/User";
 import * as help from "../middleware/helpFunction/middleModFun";
 import * as helpSim from "./helpSimulation/helpSimulation";
+import * as factory from "./abstractSimulation";
 const GLPK = require("glpk.js");
 const glpk = GLPK();
 
@@ -26,17 +27,17 @@ export class SimulationController {
       } 
       //casp in cui viene modificata solamente la funzione obiettivo
       else if (req.body.objective !== undefined) {
-        var objectiveVars = null;
+        var allObject = null;
         /*controllo per verificare che sia solo un elemento poiché la fuzione cominationFunctionObjective
         * in tal caso non restituisce un array di array, formato accettato dalla funzione che calcola le soluzioni
         *
         */
         if (req.body.objective.length == 1) {
-          objectiveVars = splitArray(
+          allObject = splitArray(
             combinationFunctionObjective(req.body.objective)
           );
         } else {
-          var objectiveVars = combinationFunctionObjective(req.body.objective);
+          var allObject = combinationFunctionObjective(req.body.objective);
         }
         c = 1;
       } else {
@@ -46,25 +47,17 @@ export class SimulationController {
          * */ 
         if (req.body.subjectTo.length === 1) {
           req.body.subjectTo.map((a) => { if (a.vars.length == 1) {
-          subjectToComb = splitArray(combinationFunctionSubjectTo(req.body.subjectTo))
-          } else {subjectToComb = combinationFunctionSubjectTo(req.body.subjectTo)}})
+          allObject = splitArray(combinationFunctionSubjectTo(req.body.subjectTo))
+          } else {allObject = combinationFunctionSubjectTo(req.body.subjectTo)}})
         } else {
-        var subjectToComb = combinationFunctionSubjectTo(req.body.subjectTo);
+        var allObject = combinationFunctionSubjectTo(req.body.subjectTo);
         }
         c = 2;
       }
       let model: any = await getSpecificModel(req.body.name, req.body.version);
-      switch (c) {
-        case 1:
-          helpSim.simulationOnlyObjective(objectiveVars, model, solve);
-          break;
-        case 2:
-          helpSim.simulationOnlySubject(subjectToComb, model, solve);
-          break;
-        case 3:
-          helpSim.simulationWithObjSub(allObject, model, solve);
-          break;
-      }
+      let factorySim: factory.SimulationFactory = new factory.SimulationFactory();
+      let prova = factorySim.getSimulation(c);
+      prova.doSimulation(allObject,model,solve);
       res.send(solve);
     } catch (e) {
       res.sendStatus(404);
