@@ -16,7 +16,7 @@ class ConcreteSimulationOnlyObj implements doSimulation {
  */
   public doSimulation(objectiveComb, model, solve) {
     model = filtraJSON(model);
-    var bestModel = null;
+    var bestModel: string = null;
     objectiveComb.map((a) => {
       model.objective.vars.map((c) => {
         a.map((b) => {
@@ -25,7 +25,6 @@ class ConcreteSimulationOnlyObj implements doSimulation {
           }
         });
       });
-      console.log(JSON.stringify(model));
       let solution = glpk.solve(model);
       switch (model.objective.direction) {
         case 1: {
@@ -35,6 +34,7 @@ class ConcreteSimulationOnlyObj implements doSimulation {
           } else if (solution.result.z < min) {
             bestModel = JSON.stringify(model);
           }
+          break;
         }
         case 2: {
           let max = Math.max(...solve.map((item: any) => item.result.z));
@@ -43,6 +43,7 @@ class ConcreteSimulationOnlyObj implements doSimulation {
           } else if (solution.result.z > max) {
             bestModel = JSON.stringify(model);
           }
+          break;
         }
       }
       solve.push(solution);
@@ -60,7 +61,6 @@ class ConcreteSimulationOnlySub implements doSimulation {
  * @param solve array delle soluzioni
  */
   public doSimulation(subjectComb, model, solve) {
-    console.log(JSON.stringify(subjectComb));
     model = filtraJSON(model);
     var bestModel: string = null;
     subjectComb.map((a) => {
@@ -77,7 +77,6 @@ class ConcreteSimulationOnlySub implements doSimulation {
           });
         });
       });
-      //console.log(JSON.stringify(model))
       let solution = glpk.solve(model);
       switch (model.objective.direction) {
         case 1: {
@@ -87,6 +86,7 @@ class ConcreteSimulationOnlySub implements doSimulation {
           } else if (solution.result.z < min) {
             bestModel = JSON.stringify(model);
           }
+          break;
         }
         case 2: {
           let max = Math.max(...solve.map((item: any) => item.result.z));
@@ -95,6 +95,7 @@ class ConcreteSimulationOnlySub implements doSimulation {
           } else if (solution.result.z > max) {
             bestModel = JSON.stringify(model);
           }
+          break;
         }
       }
       solve.push(solution);
@@ -135,7 +136,6 @@ class ConcreteSimulationObjSub implements doSimulation {
           });
         });
       });
-      //console.log(JSON.stringify(model));
       let solution = glpk.solve(model);
       switch (model.objective.direction) {
         case 1: {
@@ -145,6 +145,7 @@ class ConcreteSimulationObjSub implements doSimulation {
           } else if (solution.result.z < min) {
             bestModel = JSON.stringify(model);
           }
+          break;
         }
         case 2: {
           let max = Math.max(...solve.map((item: any) => item.result.z));
@@ -153,6 +154,7 @@ class ConcreteSimulationObjSub implements doSimulation {
           } else if (solution.result.z > max) {
             bestModel = JSON.stringify(model);
           }
+          break;
         }
       }
       solve.push(solution);

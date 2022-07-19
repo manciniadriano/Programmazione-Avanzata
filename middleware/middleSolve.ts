@@ -157,7 +157,6 @@ export const checkCreditSimulation = async (req: any, res: any, next: any) => {
       throw "Unauthorized";
     } else {
       let newBudget = user.budget - totalCost;
-      console.log(newBudget);
       await User.budgetUpdate(newBudget, req.user.email);
     }
     next();

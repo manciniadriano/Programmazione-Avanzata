@@ -1,9 +1,6 @@
 import { getSpecificModel } from "../model/Model";
-import { getBudget } from "../model/User";
-import * as user from "../model/User";
-import * as help from "../middleware/helpFunction/middleModFun";
-import * as helpSim from "./helpSimulation/helpSimulation";
 import * as factory from "./abstractSimulation";
+
 const GLPK = require("glpk.js");
 const glpk = GLPK();
 
@@ -56,8 +53,8 @@ export class SimulationController {
       }
       let model: any = await getSpecificModel(req.body.name, req.body.version);
       let factorySim: factory.SimulationFactory = new factory.SimulationFactory();
-      let prova = factorySim.getSimulation(c);
-      prova.doSimulation(allObject,model,solve);
+      let simulation = factorySim.getSimulation(c); //creazione dell'oggetto corretto per la simulazione in base al caso tramite factory
+      simulation.doSimulation(allObject,model,solve);
       res.send(solve);
     } catch (e) {
       res.sendStatus(404);

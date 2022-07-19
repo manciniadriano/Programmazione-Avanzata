@@ -13,4 +13,3 @@ const HOST = '0.0.0.0';
 app.use('/', require("./routes/pages"));
 
 app.listen(PORT, HOST);
-console.log("Server partito porta 8080");
