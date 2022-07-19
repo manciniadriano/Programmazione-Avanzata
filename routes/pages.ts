@@ -112,6 +112,7 @@ router.post(
 router.get(
   "/getSimulation",
   auth.checkUser,
+  solve.checkCreditSimulation,
   solve.checkDoSimulation,
   async (req, res) => {
     cntrSimulation.doSimulation(req, res);

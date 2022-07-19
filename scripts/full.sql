@@ -22,7 +22,7 @@ CREATE TABLE models(
 
 -- inserimento di 2 utenti
 INSERT INTO users(email, budget) VALUES
-('user@user.com', 5),
+('user@user.com', 15),
 ('nicola@nicola.com', 100);
 
 -- inserimento del primo modello

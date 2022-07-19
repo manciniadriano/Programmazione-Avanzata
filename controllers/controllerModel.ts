@@ -35,6 +35,10 @@ export class ModelController {
       );
       let options = JSON.stringify(modelSolve.options);
       let filtrato = filtraJSON(modelSolve);
+      
+      let oldBudget : any = await user.getBudget(req.user.email)
+      let newBudget= oldBudget.budget - modelSolve.cost;
+      await user.budgetUpdate(newBudget, req.user.email); // aggiorniamo il budget dell'utente, sottraendogli il costo del modello.
       let solveModel = glpk.solve(filtrato, options);
       res.status(200).json(solveModel);
     } catch (e) {    
