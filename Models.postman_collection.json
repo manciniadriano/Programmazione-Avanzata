@@ -1,0 +1,371 @@
+{
+	"info": {
+		"_postman_id": "b8f7ebb4-d46c-4e49-98aa-3a279bdcdb11",
+		"name": "Models",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "7723713"
+	},
+	"item": [
+		{
+			"name": "newModel",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOjE2NTc1NzMxMDUsImV4cCI6MTY4OTEwOTEwNSwiYXVkIjoiIiwic3ViIjoiIiwiZW1haWwiOiJ1c2VyQHVzZXIuY29tIiwicm9sZSI6IjEifQ.ZclEr1WrkJBPZ-eiwGs55goZqxoyXGRpXB6Mb7-4Lyk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"mip_with_binaries1\",\r\n  \"objective\": {\r\n    \"direction\": 1,\r\n    \"name\": \"obj\",\r\n    \"vars\": [\r\n      {\r\n        \"name\": \"x1\",\r\n        \"coef\": -1\r\n      },\r\n      {\r\n        \"name\": \"x2\",\r\n        \"coef\": -2\r\n      },\r\n      {\r\n        \"name\": \"x3\",\r\n        \"coef\": 0.1\r\n      },\r\n      {\r\n        \"name\": \"x4\",\r\n        \"coef\": 3\r\n      }\r\n    ]\r\n  },\r\n  \"subjectTo\": [\r\n    {\r\n      \"name\": \"c1\",\r\n      \"vars\": [\r\n        {\r\n          \"name\": \"x1\",\r\n          \"coef\": 1\r\n        },\r\n        {\r\n          \"name\": \"x2\",\r\n          \"coef\": 1\r\n        }\r\n      ],\r\n      \"bnds\": {\r\n        \"type\": 3,\r\n        \"ub\": 5,\r\n        \"lb\": 0\r\n      }\r\n    },\r\n    {\r\n      \"name\": \"c2\",\r\n      \"vars\": [\r\n        {\r\n          \"name\": \"x1\",\r\n          \"coef\": 2\r\n        },\r\n        {\r\n          \"name\": \"x2\",\r\n          \"coef\": -1\r\n        }\r\n      ],\r\n      \"bnds\": {\r\n        \"type\": 2,\r\n        \"ub\": 0,\r\n        \"lb\": 0\r\n      }\r\n    },\r\n    {\r\n      \"name\": \"c3\",\r\n      \"vars\": [\r\n        {\r\n          \"name\": \"x1\",\r\n          \"coef\": -1\r\n        },\r\n        {\r\n          \"name\": \"x2\",\r\n          \"coef\": 3\r\n        }\r\n      ],\r\n      \"bnds\": {\r\n        \"type\": 2,\r\n        \"ub\": 0,\r\n        \"lb\": 0\r\n      }\r\n    },\r\n    {\r\n      \"name\": \"c4\",\r\n      \"vars\": [\r\n        {\r\n          \"name\": \"x3\",\r\n          \"coef\": 1\r\n        },\r\n        {\r\n          \"name\": \"x4\",\r\n          \"coef\": 1\r\n        }\r\n      ],\r\n      \"bnds\": {\r\n        \"type\": 2,\r\n        \"ub\": 0,\r\n        \"lb\": 0.5\r\n      }\r\n    }\r\n  ],\r\n  \"binaries\": [\r\n    \"x3\",\r\n    \"x4\"\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/newModel",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"newModel"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "solveModel",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOjE2NTc1NzMxMDUsImV4cCI6MTY4OTEwOTEwNSwiYXVkIjoiIiwic3ViIjoiIiwiZW1haWwiOiJ1c2VyQHVzZXIuY29tIiwicm9sZSI6IjEifQ.ZclEr1WrkJBPZ-eiwGs55goZqxoyXGRpXB6Mb7-4Lyk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"mip_with_binaries\",\r\n    \"version\": 1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/solveModel",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"solveModel"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "newReview",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOjE2NTc1NzMxMDUsImV4cCI6MTY4OTEwOTEwNSwiYXVkIjoiIiwic3ViIjoiIiwiZW1haWwiOiJ1c2VyQHVzZXIuY29tIiwicm9sZSI6IjEifQ.ZclEr1WrkJBPZ-eiwGs55goZqxoyXGRpXB6Mb7-4Lyk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"mip_with_binaries\",\r\n  \"objective\": {\r\n    \"direction\": 2,\r\n    \"name\": \"obj\",\r\n    \"vars\": [\r\n      {\r\n        \"name\": \"x1\",\r\n        \"coef\": 2\r\n      },\r\n      {\r\n        \"name\": \"x2\",\r\n        \"coef\": 3\r\n      },\r\n      {\r\n        \"name\": \"x3\",\r\n        \"coef\": 4\r\n      },\r\n      {\r\n        \"name\": \"x4\",\r\n        \"coef\": 5\r\n      }\r\n    ]\r\n  },\r\n  \"subjectTo\": [\r\n    {\r\n      \"name\": \"c1\",\r\n      \"vars\": [\r\n        {\r\n          \"name\": \"x1\",\r\n          \"coef\": -1\r\n        },\r\n        {\r\n          \"name\": \"x2\",\r\n          \"coef\": 1\r\n        },\r\n        {\r\n          \"name\": \"x3\",\r\n          \"coef\": 1\r\n        },\r\n        {\r\n          \"name\": \"x4\",\r\n          \"coef\": 10\r\n        }\r\n      ],\r\n      \"bnds\": {\r\n        \"type\": 3,\r\n        \"ub\": 20,\r\n        \"lb\": 0\r\n      }\r\n    },\r\n    {\r\n      \"name\": \"c2\",\r\n      \"vars\": [\r\n        {\r\n          \"name\": \"x1\",\r\n          \"coef\": 1\r\n        },\r\n        {\r\n          \"name\": \"x2\",\r\n          \"coef\": -3\r\n        },\r\n        {\r\n          \"name\": \"x3\",\r\n          \"coef\": 1\r\n        }\r\n      ],\r\n      \"bnds\": {\r\n        \"type\": 3,\r\n        \"ub\": 30,\r\n        \"lb\": 0\r\n      }\r\n    },\r\n    {\r\n      \"name\": \"c3\",\r\n      \"vars\": [\r\n        {\r\n          \"name\": \"x2\",\r\n          \"coef\": 1\r\n        },\r\n        {\r\n          \"name\": \"x4\",\r\n          \"coef\": -3.5\r\n        }\r\n      ],\r\n      \"bnds\": {\r\n        \"type\": 5,\r\n        \"ub\": 0,\r\n        \"lb\": 0\r\n      }\r\n    }\r\n  ],\r\n  \"bounds\": [\r\n    {\r\n      \"name\": \"x1\",\r\n      \"type\": 4,\r\n      \"ub\": 40,\r\n      \"lb\": 0\r\n    },\r\n    {\r\n      \"name\": \"x4\",\r\n      \"type\": 4,\r\n      \"ub\": 3,\r\n      \"lb\": 2\r\n    }\r\n  ],\r\n  \"generals\": [\r\n    \"x4\"\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/newReview",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"newReview"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "admin",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOjE2NTc2MjA5OTcsImV4cCI6MTY4OTE1Njk5NywiYXVkIjoiIiwic3ViIjoiIiwiZW1haWwiOiJhZG1pbkBhZG1pbi5jb20iLCJyb2xlIjoiMiIsImVtYWlsdXNlciI6InVzZXJAdXNlci5jb20iLCJidWRnZXQiOiIyMDAifQ.wtggnSl5_Ltl7nQf2bfO4JbFunf_1_aVUUMNBigpWDU",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/admin",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"admin"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "filterReviews",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOjE2NTc1NzMxMDUsImV4cCI6MTY4OTEwOTEwNSwiYXVkIjoiIiwic3ViIjoiIiwiZW1haWwiOiJ1c2VyQHVzZXIuY29tIiwicm9sZSI6IjEifQ.ZclEr1WrkJBPZ-eiwGs55goZqxoyXGRpXB6Mb7-4Lyk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"name\": \"mip_with_binaries\",\r\n  \"date\": \"7/17/2022\",\r\n  \"numvars\":4\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/filterReviews",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"filterReviews"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "filterModels",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOjE2NTc1NzMxMDUsImV4cCI6MTY4OTEwOTEwNSwiYXVkIjoiIiwic3ViIjoiIiwiZW1haWwiOiJ1c2VyQHVzZXIuY29tIiwicm9sZSI6IjEifQ.ZclEr1WrkJBPZ-eiwGs55goZqxoyXGRpXB6Mb7-4Lyk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"numvars\":4,\r\n    \"binaries\":0,\r\n    \"generals\":1\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/filterModels",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"filterModels"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "deleteReview",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOjE2NTc1NzMxMDUsImV4cCI6MTY4OTEwOTEwNSwiYXVkIjoiIiwic3ViIjoiIiwiZW1haWwiOiJ1c2VyQHVzZXIuY29tIiwicm9sZSI6IjEifQ.ZclEr1WrkJBPZ-eiwGs55goZqxoyXGRpXB6Mb7-4Lyk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"mip_with_binaries\",\r\n    \"version\":2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/deleteReview",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"deleteReview"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getDeletedReview",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOjE2NTc1NzMxMDUsImV4cCI6MTY4OTEwOTEwNSwiYXVkIjoiIiwic3ViIjoiIiwiZW1haWwiOiJ1c2VyQHVzZXIuY29tIiwicm9sZSI6IjEifQ.ZclEr1WrkJBPZ-eiwGs55goZqxoyXGRpXB6Mb7-4Lyk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/getDeletedReview",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"getDeletedReview"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "restoreReview",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOjE2NTc1NzMxMDUsImV4cCI6MTY4OTEwOTEwNSwiYXVkIjoiIiwic3ViIjoiIiwiZW1haWwiOiJ1c2VyQHVzZXIuY29tIiwicm9sZSI6IjEifQ.ZclEr1WrkJBPZ-eiwGs55goZqxoyXGRpXB6Mb7-4Lyk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\":\"mip\",\r\n    \"version\":2\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/restoreReview",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"restoreReview"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "getSimulation",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiIiLCJpYXQiOjE2NTc1NzMxMDUsImV4cCI6MTY4OTEwOTEwNSwiYXVkIjoiIiwic3ViIjoiIiwiZW1haWwiOiJ1c2VyQHVzZXIuY29tIiwicm9sZSI6IjEifQ.ZclEr1WrkJBPZ-eiwGs55goZqxoyXGRpXB6Mb7-4Lyk",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"mip_with_binaries\",\r\n    \"version\": 1,\r\n    \"objective\": [\r\n        {\r\n            \"name\": \"x1\",\r\n            \"start\": 0.9,\r\n            \"end\": 1.0,\r\n            \"step\": 0.1\r\n        }\r\n    ],\r\n    \"subjectTo\": [\r\n        {\r\n            \"name\": \"c1\",\r\n            \"vars\": [\r\n                {\r\n                    \"name\": \"x2\",\r\n                    \"start\": 2.2,\r\n                    \"end\": 2.4,\r\n                    \"step\": 0.1\r\n                }\r\n            ]\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:8080/getSimulation",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"getSimulation"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
